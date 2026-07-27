@@ -16,23 +16,23 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Prótesis biónicas de brazo fabricadas con materiales reciclados e impresión 3D. Tecnología humana sin límites ni desperdicios. Proyecto Semillero HeroBots · SENA · Minciencias.",
+          "Prótesis biónicas de brazo fabricadas con materiales reciclados e impresión 3D. Tecnología humana sin límites ni desperdicios. Proyecto Semillero HeroBots · SENA",
       },
-      { property: "og:title", content: "LRM Robotics — Move Beyond" },
+      { property: "og:title", content: "LRM Robotics — Move Beyond · Prótesis biónicas radicales" },
       {
         property: "og:description",
         content:
-          "Biónica radical: prótesis de brazo impresas en 3D con materiales reciclados, IA adaptativa y energía solar. Devolviendo movimiento y dignidad.",
+          "Prótesis biónicas de brazo fabricadas con materiales reciclados e impresión 3D. Tecnología humana sin límites ni desperdicios. Proyecto Semillero HeroBots · SENA",
       },
       { property: "og:type", content: "website" },
       { property: "og:image", content: heroArm.url },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:image", content: heroArm.url },
-      { name: "twitter:title", content: "LRM Robotics — Move Beyond" },
+      { name: "twitter:title", content: "LRM Robotics — Move Beyond · Prótesis biónicas radicales" },
       {
         name: "twitter:description",
         content:
-          "Prótesis biónicas radicales con materiales reciclados, IA adaptativa y energía solar.",
+          "Prótesis biónicas de brazo fabricadas con materiales reciclados e impresión 3D. Tecnología humana sin límites ni desperdicios. Proyecto Semillero HeroBots · SENA",
       },
     ],
   }),
