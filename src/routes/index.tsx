@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import logoDark from "@/assets/logo-dark.png.asset.json";
 import logoLight from "@/assets/logo-light.png.asset.json";
+import lrmLogo from "@/assets/lrm-logo.png.asset.json";
 import heroArm from "@/assets/hero-arm.jpg.asset.json";
 import pieza13 from "@/assets/pieza-13.png.asset.json";
 import pieza15 from "@/assets/pieza-15.png.asset.json";
@@ -16,13 +17,13 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Prótesis biónicas de brazo fabricadas con materiales reciclados e impresión 3D. Tecnología humana sin límites ni desperdicios. Proyecto Semillero HeroBots · SENA",
+          "Prótesis biónicas de brazo desarrolladas con investigación, modelado CAD y economía circular. Semillero HeroBots · Soacha, Cundinamarca · Colombia.",
       },
       { property: "og:title", content: "LRM Robotics — Move Beyond · Prótesis biónicas radicales" },
       {
         property: "og:description",
         content:
-          "Prótesis biónicas de brazo fabricadas con materiales reciclados e impresión 3D. Tecnología humana sin límites ni desperdicios. Proyecto Semillero HeroBots · SENA",
+          "Prótesis biónicas de brazo desarrolladas con investigación, modelado CAD y economía circular. Semillero HeroBots · Soacha, Cundinamarca · Colombia.",
       },
       { property: "og:type", content: "website" },
       { property: "og:image", content: heroArm.url },
@@ -32,7 +33,7 @@ export const Route = createFileRoute("/")({
       {
         name: "twitter:description",
         content:
-          "Prótesis biónicas de brazo fabricadas con materiales reciclados e impresión 3D. Tecnología humana sin límites ni desperdicios. Proyecto Semillero HeroBots · SENA",
+          "Prótesis biónicas de brazo desarrolladas con investigación, modelado CAD y economía circular. Semillero HeroBots · Soacha, Cundinamarca · Colombia.",
       },
     ],
   }),
@@ -72,29 +73,13 @@ function IntroSplash({ onDone }: { onDone: () => void }) {
       <div className="absolute inset-0 bg-grid opacity-40" />
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan to-transparent animate-scan" />
       <div className="relative flex flex-col items-center gap-6">
-        <div className="relative size-32">
-          <svg viewBox="0 0 100 100" className="absolute inset-0 size-full text-cyan">
-            <circle
-              cx="50"
-              cy="50"
-              r="46"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1"
-              strokeDasharray="4 6"
-              opacity="0.4"
-            />
-            <path
-              d="M20 80 L20 20 L50 20 M50 20 Q70 20 70 40 Q70 55 50 55 L60 80 M75 80 L75 20 L85 40 L85 80"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="animate-circuit"
-            />
-          </svg>
-          <div className="absolute inset-0 rounded-full bg-cyan/20 blur-2xl animate-pulse-dot" />
+        <div className="relative size-40 sm:size-48">
+          <div className="absolute inset-0 rounded-full bg-cyan/25 blur-3xl animate-pulse-dot" />
+          <img
+            src={lrmLogo.url}
+            alt="LRM Robotics"
+            className="relative size-full object-contain animate-assemble drop-shadow-[0_0_25px_var(--cyan)]"
+          />
         </div>
         <div
           className={`font-mono text-[10px] uppercase tracking-[0.4em] text-muted-foreground transition-all duration-500 ${
@@ -188,7 +173,7 @@ function Hero() {
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-cyan/30 bg-cyan/5 px-3 py-1">
             <span className="size-1.5 rounded-full bg-cyan animate-pulse-dot" />
             <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-cyan">
-              Biónica radical · Colombia
+              Biónica radical · Soacha · Colombia
             </span>
           </div>
           <h1 className="font-display text-5xl font-bold leading-[0.95] tracking-tight sm:text-6xl lg:text-7xl">
@@ -198,10 +183,9 @@ function Hero() {
             </span>
           </h1>
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
-            Desarrollamos prótesis biónicas de brazo{" "}
-            <span className="text-foreground">impresas en 3D con materiales reciclados</span>,
-            controladas por señales musculares e impulsadas por energía solar. Existimos para
-            devolverle movimiento y dignidad a las personas.
+            Investigamos y desarrollamos prótesis biónicas de brazo{" "}
+            <span className="text-foreground">basadas en economía circular, modelado CAD e IA adaptativa</span>,
+            desde el semillero HeroBots del SENA en Soacha, Cundinamarca.
           </p>
           <div className="mt-10 flex flex-wrap gap-3">
             <a
@@ -214,16 +198,16 @@ function Hero() {
               </svg>
             </a>
             <a
-              href="#contacto"
+              href="#investigacion"
               className="inline-flex items-center gap-2 rounded-md border border-border bg-surface px-6 py-3.5 text-sm font-semibold text-foreground transition-colors hover:border-cyan"
             >
-              ¿Eres una fundación? Sé parte del cambio
+              Ver la investigación
             </a>
           </div>
           <div className="mt-12 flex gap-8 border-t border-border pt-6 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
             <div>
               <div className="text-cyan">▸ &lt; 300 ms</div>
-              <div className="mt-1">Latencia EMG</div>
+              <div className="mt-1">Latencia EMG objetivo</div>
             </div>
             <div>
               <div className="text-cyan">▸ 100%</div>
@@ -236,21 +220,22 @@ function Hero() {
           </div>
         </div>
 
-        <div className="relative animate-assemble [animation-delay:200ms]">
-          <div className="absolute -inset-10 rounded-full bg-cyan/25 blur-[100px]" />
-          <div className="relative aspect-square overflow-hidden rounded-2xl border border-border bg-navy panel glow-cyan">
-            <img
-              src={heroArm.url}
-              alt="Prótesis biónica LRM con circuitos iluminados en azul"
-              width={1600}
-              height={1600}
-              className="size-full object-cover animate-float"
-            />
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/60 to-transparent" />
-            <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between font-mono text-[10px] uppercase tracking-widest text-cyan">
-              <span>▸ LRM-A1 · Prototipo activo</span>
-              <span className="animate-pulse-dot">◉ REC</span>
-            </div>
+        {/* Logo protagonista — sin fondo, animación premium */}
+        <div className="relative grid place-items-center">
+          <div className="pointer-events-none absolute inset-0 -z-10">
+            <div className="absolute left-1/2 top-1/2 size-[110%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan/25 blur-[120px] animate-pulse-dot" />
+            <div className="absolute left-1/2 top-1/2 size-[70%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/20 blur-[80px]" />
+          </div>
+          <img
+            src={lrmLogo.url}
+            alt="Logotipo LRM Robotics"
+            width={800}
+            height={800}
+            className="relative w-full max-w-[520px] object-contain animate-hero-logo drop-shadow-[0_0_40px_color-mix(in_oklab,var(--cyan)_60%,transparent)] animate-float"
+          />
+          <div className="mt-6 flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.3em] text-cyan">
+            <span className="size-1.5 rounded-full bg-cyan animate-pulse-dot" />
+            LRM · Move Beyond
           </div>
         </div>
       </div>
@@ -279,8 +264,8 @@ function Problema() {
             </h2>
             <p className="mt-6 max-w-md text-lg text-muted-foreground">
               En Colombia, acceder a una prótesis biónica puede costar hasta 100 millones de pesos
-              y tomar más de un año. Es tiempo que las personas pierden esperando recuperar algo
-              tan básico como abrir una puerta o abrazar a alguien.
+              y superar los 425 días de espera. Es tiempo que las personas pierden esperando
+              recuperar algo tan básico como abrir una puerta o abrazar a alguien.
             </p>
           </div>
           <div className="grid gap-4 sm:grid-cols-3">
@@ -307,7 +292,7 @@ function Tecnologia() {
     {
       n: "01",
       title: "Manufactura Circular",
-      desc: "Prótesis fabricadas con polímeros reciclados (PET y HDPE) mediante impresión 3D.",
+      desc: "Prótesis diseñadas para fabricarse con polímeros reciclados (PET y HDPE) mediante impresión 3D.",
       analogy:
         "Es como darle una segunda vida a las botellas de plástico: en vez de terminar en la basura, se convierten en el brazo de alguien.",
       icon: (
@@ -331,7 +316,7 @@ function Tecnologia() {
     {
       n: "03",
       title: "IA Adaptativa",
-      desc: "Control por señales mioeléctricas (EMG) con latencia menor a 300 ms. Aprende del usuario.",
+      desc: "Control por señales mioeléctricas (EMG) con latencia objetivo menor a 300 ms. Aprende del usuario.",
       analogy:
         "Escuchamos el «lenguaje eléctrico» que tus músculos ya usan para moverse; la IA lo traduce en movimiento real, más preciso con cada uso.",
       icon: (
@@ -354,14 +339,14 @@ function Tecnologia() {
       <div className="mx-auto max-w-7xl px-6">
         <div className="max-w-3xl">
           <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-cyan">
-            02 · Nuestra solución
+            02 · Nuestra propuesta
           </div>
           <h2 className="mt-4 text-4xl font-bold sm:text-5xl">
             Tres pilares. <span className="text-gradient">Un mismo propósito.</span>
           </h2>
           <p className="mt-4 text-lg text-muted-foreground">
-            Ingeniería con propósito social: cada componente de la prótesis LRM responde a una
-            pregunta humana antes que a una técnica.
+            Ingeniería con propósito social: cada componente propuesto para la prótesis LRM
+            responde a una pregunta humana antes que a una técnica.
           </p>
         </div>
 
@@ -394,7 +379,7 @@ function Tecnologia() {
           <div className="mb-8 flex items-end justify-between">
             <div>
               <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-cyan">
-                ▸ Planos técnicos
+                ▸ Modelado CAD
               </div>
               <h3 className="mt-2 font-display text-2xl font-semibold">
                 Ingeniería en cada milímetro
@@ -436,50 +421,147 @@ function Tecnologia() {
 /* --------------------------- investigación ------------------------------- */
 function Investigacion() {
   const objectives = [
-    "Fundamentar el diseño de la prótesis con base en usuarios reales.",
-    "Categorizar las barreras del sistema de salud colombiano.",
-    "Investigar los parámetros técnicos y biomecánicos.",
-    "Examinar el sistema de inteligencia artificial adaptativa.",
-    "Determinar la viabilidad del sistema energético híbrido.",
+    {
+      title: "Fundamentar el diseño con base en usuarios reales",
+      desc: "Analizar las necesidades funcionales y contextuales de personas con amputación de miembro superior para orientar el diseño de la prótesis desde la experiencia del usuario.",
+    },
+    {
+      title: "Categorizar las barreras del sistema de salud colombiano",
+      desc: "Identificar y clasificar los obstáculos económicos, administrativos y tecnológicos que dificultan el acceso a prótesis funcionales en el país.",
+    },
+    {
+      title: "Investigar los parámetros técnicos y biomecánicos",
+      desc: "Estudiar los rangos articulares, cargas mecánicas y materiales requeridos para el diseño de una prótesis de brazo funcional y segura.",
+    },
+    {
+      title: "Examinar la IA adaptativa y el sistema energético híbrido",
+      desc: "Explorar arquitecturas de control mioeléctrico basadas en IA y evaluar la viabilidad de un sistema energético híbrido (batería + supercapacitor + solar).",
+    },
   ];
   return (
     <section id="investigacion" className="border-y border-border bg-surface/40 py-28">
-      <div className="mx-auto grid max-w-7xl gap-12 px-6 lg:grid-cols-[1fr_1.2fr]">
-        <div>
-          <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-cyan">
-            03 · Investigación
-          </div>
-          <h2 className="mt-4 text-4xl font-bold sm:text-5xl">
-            Semillero <span className="text-gradient">HeroBots</span>
-          </h2>
-          <p className="mt-6 max-w-md text-lg text-muted-foreground">
-            <span className="text-foreground">
-              «LRM: Biónica radical, tecnología humana sin Límites ni Desperdicios.»
-            </span>{" "}
-            Un proyecto desarrollado dentro del{" "}
-            <span className="text-foreground">Programa Ondas de Minciencias</span>, donde
-            jóvenes investigadores exploran soluciones reales a problemas colombianos.
-          </p>
-          <a
-            href="#contacto"
-            className="mt-8 inline-flex items-center gap-2 rounded-md border border-cyan/40 bg-cyan/10 px-5 py-3 text-sm font-semibold text-cyan transition-colors hover:bg-cyan hover:text-primary-foreground"
-          >
-            Conoce más del proyecto con HeroBots →
-          </a>
-        </div>
-        <ol className="space-y-3">
-          {objectives.map((o, i) => (
-            <li
-              key={i}
-              className="group panel flex items-start gap-4 p-5 transition-all hover:border-cyan"
-            >
-              <div className="grid size-10 shrink-0 place-items-center rounded-md border border-cyan/30 bg-cyan/5 font-mono text-xs text-cyan">
-                0{i + 1}
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="grid gap-12 lg:grid-cols-[1fr_1.2fr] lg:items-start">
+          <div>
+            <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-cyan">
+              03 · Investigación
+            </div>
+            <h2 className="mt-4 text-4xl font-bold sm:text-5xl">
+              Semillero <span className="text-gradient">HeroBots</span>
+            </h2>
+            <p className="mt-6 text-lg text-muted-foreground">
+              LRM Robotics es un proyecto de investigación desarrollado en{" "}
+              <span className="text-foreground">Soacha, Cundinamarca</span>, dentro del semillero
+              HeroBots. Trabajamos con rigor científico para proponer una prótesis biónica de brazo
+              ecosostenible y accesible.
+            </p>
+
+            {/* Asesor */}
+            <div className="mt-8 panel p-6">
+              <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-cyan">
+                ▸ Asesor del proyecto
               </div>
-              <p className="pt-2 text-sm leading-relaxed">{o}</p>
-            </li>
-          ))}
-        </ol>
+              <div className="mt-3 font-display text-xl font-semibold">
+                Jorge Ignacio Fiquitiva
+              </div>
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                Todo el proceso investigativo ha sido guiado por nuestro asesor, cuyo
+                acompañamiento ha sido fundamental para{" "}
+                <span className="text-foreground">estructurar la investigación</span>,{" "}
+                <span className="text-foreground">formular el problema</span>,{" "}
+                <span className="text-foreground">construir la metodología</span>,{" "}
+                <span className="text-foreground">fortalecer el rigor científico</span> y{" "}
+                <span className="text-foreground">orientar el desarrollo tecnológico</span> del
+                proyecto.
+              </p>
+            </div>
+          </div>
+
+          <div className="space-y-6">
+            {/* Problema */}
+            <div className="panel p-6">
+              <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-cyan">
+                Problema de investigación
+              </div>
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                En Colombia, las personas con discapacidad motriz enfrentan enormes barreras para
+                acceder a prótesis funcionales debido a altos costos, dependencia tecnológica
+                extranjera, tiempos de espera superiores a{" "}
+                <span className="text-foreground">425 días</span>, barreras económicas,
+                obsolescencia programada, dependencia de importaciones y ausencia de modelos de
+                economía circular en el sector.
+              </p>
+            </div>
+
+            {/* Pregunta */}
+            <div className="panel relative overflow-hidden p-6">
+              <div className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-cyan via-primary to-transparent" />
+              <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-cyan">
+                Pregunta de investigación
+              </div>
+              <p className="mt-3 font-display text-base italic leading-relaxed text-foreground">
+                «¿De qué manera una prótesis robótica ecosostenible asistida por inteligencia
+                artificial optimiza la autonomía y accesibilidad frente al modelo convencional de
+                suministro?»
+              </p>
+            </div>
+
+            {/* Objetivo general */}
+            <div className="panel p-6">
+              <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-cyan">
+                Objetivo general
+              </div>
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                Diseñar conceptualmente una prótesis robótica de brazo ecosostenible, asistida por
+                inteligencia artificial y fundamentada en principios de economía circular, que
+                contribuya a mejorar la autonomía y accesibilidad de las personas con amputación
+                de miembro superior en Colombia.
+              </p>
+            </div>
+
+            {/* Objetivos específicos */}
+            <div>
+              <div className="mb-4 font-mono text-[10px] uppercase tracking-[0.3em] text-cyan">
+                Objetivos específicos
+              </div>
+              <div className="grid gap-3 sm:grid-cols-2">
+                {objectives.map((o, i) => (
+                  <div
+                    key={i}
+                    className="group panel p-5 transition-all hover:-translate-y-1 hover:border-cyan"
+                  >
+                    <div className="font-mono text-[10px] text-cyan">
+                      0{i + 1}
+                    </div>
+                    <div className="mt-2 font-display text-sm font-semibold leading-snug">
+                      {o.title}
+                    </div>
+                    <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                      {o.desc}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Hipótesis */}
+            <div className="panel relative overflow-hidden p-6">
+              <div className="absolute inset-0 bg-gradient-to-br from-cyan/10 via-transparent to-transparent" />
+              <div className="relative">
+                <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-cyan">
+                  ▸ Hipótesis
+                </div>
+                <p className="mt-3 text-sm leading-relaxed text-foreground/90">
+                  El desarrollo de una prótesis fabricada con materiales reciclados, IA adaptativa
+                  y energía híbrida puede ofrecer un desempeño funcional{" "}
+                  <span className="text-cyan">comparable al de dispositivos comerciales
+                  importados</span>, reduciendo significativamente los costos y las barreras de
+                  acceso para las personas con amputación de miembro superior en Colombia.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );
@@ -503,10 +585,35 @@ const STEPS = [
 function Sena() {
   const [active, setActive] = useState(0);
   const timeline = [
-    { year: "2024", label: "Idea inicial", desc: "Nace LRM en el aula del semillero." },
-    { year: "2025", label: "Prototipo actual", desc: "Codo funcional impreso y IA en pruebas." },
-    { year: "2026", label: "Alianzas EPS", desc: "Escalamiento con fundaciones y salud." },
-    { year: "2027+", label: "Nuevas fronteras", desc: "Prótesis para animales y otras regiones." },
+    {
+      year: "2025",
+      label: "Nacimiento de la idea",
+      desc: "La idea de LRM nace dentro del SENA como respuesta a una necesidad social real.",
+    },
+    {
+      year: "2025",
+      label: "Consolidación del proyecto",
+      desc: "Consolidación del proyecto empresarial y desarrollo del marco conceptual.",
+    },
+    {
+      year: "2026",
+      label: "Desarrollo investigativo-empresarial",
+      desc: "Modelo organizacional, estructura administrativa, documentación, fortalecimiento del modelo de negocio y desarrollo técnico.",
+    },
+    {
+      year: "2027+",
+      label: "Escalamiento",
+      desc: "Expansión tecnológica, fortalecimiento de la investigación y nuevas líneas de innovación.",
+    },
+  ];
+  const docs = [
+    "Perfiles de cargo",
+    "Manuales",
+    "Procesos",
+    "Formatos",
+    "Diagramas",
+    "Políticas",
+    "Documentos administrativos",
   ];
   return (
     <section id="sena" className="py-28">
@@ -520,9 +627,9 @@ function Sena() {
               Empresa, formación y <span className="text-gradient">talento humano</span>
             </h2>
             <p className="mt-4 text-lg text-muted-foreground">
-              LRM Robotics es también nuestra apuesta productiva dentro del SENA: constitución
-              empresarial, modelo Canvas, misión, visión y un proceso riguroso de vinculación de
-              personas.
+              LRM Robotics es también nuestra apuesta empresarial dentro del SENA: una compañía
+              privada e independiente en construcción, con modelo Canvas, misión, visión y una
+              estructura administrativa propia.
             </p>
           </div>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -539,10 +646,17 @@ function Sena() {
 
         {/* HR flow */}
         <div className="mt-16 panel p-6 sm:p-8">
-          <div className="mb-6 flex items-center justify-between">
-            <h3 className="font-display text-xl font-semibold">
-              Simulación de selección y vinculación
-            </h3>
+          <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <h3 className="font-display text-xl font-semibold">
+                Simulación del proceso de selección y vinculación
+              </h3>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Ejercicio académico desarrollado dentro del SENA como evidencia del proceso de
+                Recursos Humanos. No corresponde a una convocatoria ni a un proceso real de
+                contratación.
+              </p>
+            </div>
             <span className="font-mono text-[10px] uppercase tracking-widest text-cyan">
               11 etapas · RR.HH.
             </span>
@@ -574,13 +688,40 @@ function Sena() {
               ))}
             </div>
           </div>
-          <p className="mt-6 max-w-3xl text-sm leading-relaxed text-muted-foreground">
-            Buscamos perfiles como <span className="text-foreground">Analista Estadístico</span>,{" "}
-            <span className="text-foreground">Diseñador Industrial</span> e{" "}
-            <span className="text-foreground">Investigador</span>, evaluando trabajo en equipo,
-            pensamiento crítico y creatividad. La vinculación termina con la conformación de un
-            equipo diverso y multidisciplinar.
-          </p>
+        </div>
+
+        {/* Documentación */}
+        <div className="mt-10 panel p-6 sm:p-8">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-cyan">
+                ▸ Documentación
+              </div>
+              <h3 className="mt-2 font-display text-xl font-semibold">
+                Repositorio documental del proceso
+              </h3>
+              <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
+                Espacio preparado para incorporar posteriormente los documentos desarrollados
+                durante nuestro proceso de Recursos Humanos y de estructuración empresarial.
+              </p>
+            </div>
+            <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+              Próximamente
+            </span>
+          </div>
+          <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {docs.map((d) => (
+              <div
+                key={d}
+                className="flex items-center justify-between rounded-md border border-dashed border-border bg-surface/40 px-4 py-3 text-sm text-muted-foreground transition-colors hover:border-cyan/40"
+              >
+                <span>{d}</span>
+                <span className="font-mono text-[9px] uppercase tracking-widest text-cyan/70">
+                  —
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Timeline */}
@@ -611,27 +752,33 @@ function Sena() {
 const TEAM = [
   {
     name: "Yuliana Marín",
-    role: "Analista Estadística",
-    bio: "Traduce datos en decisiones: valida hipótesis, mide impacto y guía el proyecto con evidencia.",
+    role: "Escritora técnica · Analista",
+    bio: "Responsable de documentación y apoyo en investigación. Traduce los avances del proyecto en textos claros y rigurosos.",
     initials: "YM",
   },
   {
-    name: "Kevin Olivera",
-    role: "Diseñador",
-    bio: "Da forma tangible a la biónica: piezas, ensambles y la estética visual de la marca.",
-    initials: "KO",
-  },
-  {
     name: "Angie Romero",
-    role: "Integrante del equipo",
-    bio: "Aporta en investigación y desarrollo del proyecto desde el semillero HeroBots.",
+    role: "Escritora técnica · Analista documental",
+    bio: "Investigadora y responsable de documentación científica. Aporta rigor y estructura al proceso investigativo.",
     initials: "AR",
   },
   {
+    name: "Kevin Olivera",
+    role: "Ingeniería · Modelado CAD",
+    bio: "Encargado del desarrollo tecnológico y el diseño mecánico. Traduce los requerimientos técnicos en modelos CAD.",
+    initials: "KO",
+  },
+  {
     name: "Juan Lasso",
-    role: "Integrante del equipo",
-    bio: "Contribuye en desarrollo técnico y experimentación con el prototipo LRM.",
+    role: "Ingeniería · Dirección tecnológica",
+    bio: "Diseño del sistema y arquitectura del proyecto. Lidera la investigación tecnológica y las decisiones de ingeniería.",
     initials: "JL",
+  },
+  {
+    name: "Dana Vela",
+    role: "Investigadora · Validación de usuario",
+    bio: "Participa en entrevistas y aporta al proceso investigativo desde la experiencia del usuario, fortaleciendo la validación conceptual del proyecto.",
+    initials: "DV",
   },
 ];
 
@@ -647,11 +794,11 @@ function Equipo() {
             Personas detrás <span className="text-gradient">del movimiento.</span>
           </h2>
           <p className="mt-4 text-lg text-muted-foreground">
-            Un equipo joven del SENA que decidió que la tecnología también puede ser un acto de
-            cuidado.
+            Un equipo del semillero HeroBots del SENA, en Soacha, dedicado a la investigación,
+            documentación, modelado CAD y diseño conceptual de la prótesis LRM.
           </p>
         </div>
-        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
           {TEAM.map((m) => (
             <article
               key={m.name}
@@ -670,7 +817,7 @@ function Equipo() {
                 {m.role}
               </div>
               <div className="mt-1 font-display text-lg font-semibold">{m.name}</div>
-              <p className="mt-3 max-h-0 overflow-hidden text-sm text-muted-foreground transition-all duration-500 group-hover:max-h-32">
+              <p className="mt-3 max-h-0 overflow-hidden text-sm text-muted-foreground transition-all duration-500 group-hover:max-h-40">
                 {m.bio}
               </p>
             </article>
@@ -684,25 +831,25 @@ function Equipo() {
 /* ---------------------------------- blog --------------------------------- */
 const POSTS = [
   {
-    date: "May 2025",
-    tag: "Prototipo",
-    title: "Ensamble del primer codo funcional LRM-A1",
+    date: "2026",
+    tag: "Modelado CAD",
+    title: "Modelado de las primeras piezas de la prótesis",
     excerpt:
-      "Terminamos la primera versión mecánica del codo con las piezas 11 a 18. Rango de movimiento 0°–135°.",
+      "Avanzamos en el diseño CAD del conjunto del codo: definimos geometrías, tolerancias y relaciones cinemáticas de las primeras piezas del sistema.",
   },
   {
-    date: "Abr 2025",
+    date: "2026",
     tag: "Investigación",
-    title: "Barreras del sistema de salud: primeros hallazgos",
+    title: "Entrevista a Dana Vela, estudiante de grado 11",
     excerpt:
-      "Entrevistamos a 12 personas con amputación transhumeral en Cali. Los tiempos superan los 14 meses.",
+      "Dana Vela, estudiante de grado 11 y participante del proceso investigativo, aporta información valiosa para comprender las necesidades reales de las personas con discapacidad de miembro superior.",
   },
   {
-    date: "Mar 2025",
-    tag: "Comunidad",
-    title: "Aliados fundacionales: convocatoria abierta",
+    date: "2026",
+    tag: "REDCOLSI",
+    title: "Participación en el Encuentro Nacional e Internacional de Semilleros",
     excerpt:
-      "Invitamos a fundaciones y EPS a co-diseñar el piloto 2026. Escríbenos si quieres sumarte.",
+      "Presentamos el proyecto LRM en el Encuentro de Semilleros de Investigación REDCOLSI, realizado en la Universidad de La Salle, Bogotá — un escenario académico clave para el proyecto.",
   },
 ];
 
@@ -760,7 +907,7 @@ const GLOSSARY = [
   },
   {
     term: "Economía circular",
-    def: "Un modelo donde nada se desperdicia: los materiales usados vuelven a la cadena productiva. En LRM, plásticos reciclados se convierten en piezas nuevas.",
+    def: "Un modelo donde nada se desperdicia: los materiales usados vuelven a la cadena productiva. En LRM, plásticos reciclados están pensados para convertirse en piezas nuevas.",
   },
   {
     term: "Supercapacitor",
@@ -779,8 +926,8 @@ const GLOSSARY = [
     def: "El tiempo entre que piensas moverte y la prótesis responde. Menos de 300 ms se siente casi natural.",
   },
   {
-    term: "Programa Ondas · Minciencias",
-    def: "Iniciativa colombiana que apoya investigación científica en niños, niñas y jóvenes desde el aula.",
+    term: "Semillero de investigación",
+    def: "Espacio académico donde estudiantes desarrollan proyectos de investigación con acompañamiento de un asesor. LRM pertenece al semillero HeroBots.",
   },
   {
     term: "Modelo Canvas",
@@ -867,7 +1014,8 @@ function Contacto() {
             Construyamos <span className="text-gradient">movimiento juntos.</span>
           </h2>
           <p className="mt-4 max-w-md text-lg text-muted-foreground">
-            ¿Eres fundación, EPS, aliado o simplemente alguien que quiere aportar? Escríbenos.
+            ¿Eres fundación, aliado académico o simplemente alguien que quiere aportar al proyecto?
+            Escríbenos.
           </p>
 
           <div className="mt-10 space-y-3">
@@ -969,12 +1117,12 @@ function Footer({ dark }: { dark: boolean }) {
           <div>
             <div className="font-display text-sm font-bold">LRM Robotics</div>
             <div className="font-mono text-[9px] uppercase tracking-widest text-muted-foreground">
-              Move Beyond · Cali · Colombia
+              Move Beyond · Soacha · Cundinamarca · Colombia
             </div>
           </div>
         </div>
         <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-          © {new Date().getFullYear()} · Semillero HeroBots · SENA · Minciencias
+          © {new Date().getFullYear()} · Semillero HeroBots · SENA
         </div>
       </div>
     </footer>
