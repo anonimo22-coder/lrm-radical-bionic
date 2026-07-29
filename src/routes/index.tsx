@@ -231,7 +231,7 @@ function Hero() {
             alt="Logotipo LRM Robotics"
             width={800}
             height={800}
-            className="relative w-full max-w-[520px] object-contain animate-hero-logo drop-shadow-[0_0_40px_color-mix(in_oklab,var(--cyan)_60%,transparent)] animate-float"
+            className="relative w-full max-w-[520px] object-contain animate-assemble drop-shadow-[0_0_40px_color-mix(in_oklab,var(--cyan)_60%,transparent)]"
           />
           <div className="mt-6 flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.3em] text-cyan">
             <span className="size-1.5 rounded-full bg-cyan animate-pulse-dot" />
