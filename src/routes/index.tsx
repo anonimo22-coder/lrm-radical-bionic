@@ -94,73 +94,8 @@ function IntroSplash({ onDone }: { onDone: () => void }) {
 }
 
 /* ---------------------------------- nav ---------------------------------- */
-const NAV = [
-  { href: "#tecnologia", label: "Tecnología" },
-  { href: "#investigacion", label: "Investigación" },
-  { href: "#sena", label: "SENA" },
-  { href: "#equipo", label: "Equipo" },
-  { href: "#blog", label: "Blog" },
-  { href: "#glosario", label: "Glosario" },
-];
+/* La navegación vive en @/components/site/MegaNav */
 
-function Nav({ dark, toggle }: { dark: boolean; toggle: () => void }) {
-  return (
-    <nav className="sticky top-0 z-50 border-b border-border bg-background/70 backdrop-blur-xl">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
-        <a href="#top" className="flex items-center gap-3">
-          <img
-            src={dark ? logoDark.url : logoLight.url}
-            alt="LRM Robotics"
-            className="h-9 w-9 object-contain"
-          />
-          <div className="hidden sm:block">
-            <div className="font-display text-sm font-bold leading-none tracking-tight">
-              LRM Robotics
-            </div>
-            <div className="mt-0.5 font-mono text-[9px] uppercase tracking-[0.25em] text-muted-foreground">
-              Move Beyond
-            </div>
-          </div>
-        </a>
-        <div className="hidden items-center gap-1 md:flex">
-          {NAV.map((n) => (
-            <a
-              key={n.href}
-              href={n.href}
-              className="rounded-md px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-surface hover:text-foreground"
-            >
-              {n.label}
-            </a>
-          ))}
-        </div>
-        <div className="flex items-center gap-2">
-          <button
-            onClick={toggle}
-            aria-label="Cambiar tema"
-            className="grid size-9 place-items-center rounded-md border border-border bg-surface text-foreground transition-colors hover:border-cyan"
-          >
-            {dark ? (
-              <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="12" cy="12" r="4" />
-                <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" strokeLinecap="round" />
-              </svg>
-            ) : (
-              <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z" strokeLinejoin="round" />
-              </svg>
-            )}
-          </button>
-          <a
-            href="#contacto"
-            className="hidden rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-transform hover:scale-[1.02] sm:inline-block"
-          >
-            Contáctanos
-          </a>
-        </div>
-      </div>
-    </nav>
-  );
-}
 
 /* ---------------------------------- hero --------------------------------- */
 function Hero() {
