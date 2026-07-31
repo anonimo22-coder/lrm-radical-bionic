@@ -84,6 +84,15 @@
   --cyan-glow: oklch(0.85 0.15 210);
   --navy: oklch(0.2 0.06 250);
 
+  /* Accentos temáticos */
+  --eco: oklch(0.62 0.19 150);      /* verde · reciclaje / sostenibilidad */
+  --ai: oklch(0.58 0.22 300);       /* morado · inteligencia artificial */
+  --alert: oklch(0.58 0.23 27);     /* rojo · alertas / procesos críticos */
+  --volt: oklch(0.55 0.24 262);     /* azul eléctrico · tecnología */
+  --solar: oklch(0.72 0.17 75);     /* ámbar · energía solar */
+
+
+
   --gradient-hero: radial-gradient(1200px 600px at 50% -10%, oklch(0.85 0.12 210 / 0.35), transparent 60%);
   --gradient-cyan: linear-gradient(135deg, oklch(0.55 0.22 240), oklch(0.75 0.18 210));
   --shadow-glow: 0 0 40px -8px oklch(0.7 0.2 220 / 0.4);
