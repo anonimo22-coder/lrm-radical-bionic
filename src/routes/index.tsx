@@ -9,6 +9,11 @@ import pieza15 from "@/assets/pieza-15.png.asset.json";
 import pieza16 from "@/assets/pieza-16.png.asset.json";
 import pieza17 from "@/assets/pieza-17.png.asset.json";
 import pieza18 from "@/assets/pieza-18.png.asset.json";
+import { MegaNav } from "@/components/site/MegaNav";
+import { Equipo } from "@/components/site/Equipo";
+import { Blog } from "@/components/site/Blog";
+import { Relacion, CanvasMaqueta, Asesores } from "@/components/site/SenaExtras";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
