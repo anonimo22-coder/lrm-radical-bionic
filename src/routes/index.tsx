@@ -9,6 +9,11 @@ import pieza15 from "@/assets/pieza-15.png.asset.json";
 import pieza16 from "@/assets/pieza-16.png.asset.json";
 import pieza17 from "@/assets/pieza-17.png.asset.json";
 import pieza18 from "@/assets/pieza-18.png.asset.json";
+import { MegaNav } from "@/components/site/MegaNav";
+import { Equipo } from "@/components/site/Equipo";
+import { Blog } from "@/components/site/Blog";
+import { Relacion, CanvasMaqueta, Asesores } from "@/components/site/SenaExtras";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -94,73 +99,8 @@ function IntroSplash({ onDone }: { onDone: () => void }) {
 }
 
 /* ---------------------------------- nav ---------------------------------- */
-const NAV = [
-  { href: "#tecnologia", label: "Tecnología" },
-  { href: "#investigacion", label: "Investigación" },
-  { href: "#sena", label: "SENA" },
-  { href: "#equipo", label: "Equipo" },
-  { href: "#blog", label: "Blog" },
-  { href: "#glosario", label: "Glosario" },
-];
+/* La navegación vive en @/components/site/MegaNav */
 
-function Nav({ dark, toggle }: { dark: boolean; toggle: () => void }) {
-  return (
-    <nav className="sticky top-0 z-50 border-b border-border bg-background/70 backdrop-blur-xl">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
-        <a href="#top" className="flex items-center gap-3">
-          <img
-            src={dark ? logoDark.url : logoLight.url}
-            alt="LRM Robotics"
-            className="h-9 w-9 object-contain"
-          />
-          <div className="hidden sm:block">
-            <div className="font-display text-sm font-bold leading-none tracking-tight">
-              LRM Robotics
-            </div>
-            <div className="mt-0.5 font-mono text-[9px] uppercase tracking-[0.25em] text-muted-foreground">
-              Move Beyond
-            </div>
-          </div>
-        </a>
-        <div className="hidden items-center gap-1 md:flex">
-          {NAV.map((n) => (
-            <a
-              key={n.href}
-              href={n.href}
-              className="rounded-md px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-surface hover:text-foreground"
-            >
-              {n.label}
-            </a>
-          ))}
-        </div>
-        <div className="flex items-center gap-2">
-          <button
-            onClick={toggle}
-            aria-label="Cambiar tema"
-            className="grid size-9 place-items-center rounded-md border border-border bg-surface text-foreground transition-colors hover:border-cyan"
-          >
-            {dark ? (
-              <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="12" cy="12" r="4" />
-                <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" strokeLinecap="round" />
-              </svg>
-            ) : (
-              <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z" strokeLinejoin="round" />
-              </svg>
-            )}
-          </button>
-          <a
-            href="#contacto"
-            className="hidden rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-transform hover:scale-[1.02] sm:inline-block"
-          >
-            Contáctanos
-          </a>
-        </div>
-      </div>
-    </nav>
-  );
-}
 
 /* ---------------------------------- hero --------------------------------- */
 function Hero() {
@@ -748,156 +688,8 @@ function Sena() {
   );
 }
 
-/* --------------------------------- equipo -------------------------------- */
-const TEAM = [
-  {
-    name: "Yuliana Marín",
-    role: "Escritora técnica · Analista",
-    bio: "Responsable de documentación y apoyo en investigación. Traduce los avances del proyecto en textos claros y rigurosos.",
-    initials: "YM",
-  },
-  {
-    name: "Angie Romero",
-    role: "Escritora técnica · Analista documental",
-    bio: "Investigadora y responsable de documentación científica. Aporta rigor y estructura al proceso investigativo.",
-    initials: "AR",
-  },
-  {
-    name: "Kevin Olivera",
-    role: "Ingeniería · Modelado CAD",
-    bio: "Encargado del desarrollo tecnológico y el diseño mecánico. Traduce los requerimientos técnicos en modelos CAD.",
-    initials: "KO",
-  },
-  {
-    name: "Juan Lasso",
-    role: "Ingeniería · Dirección tecnológica",
-    bio: "Diseño del sistema y arquitectura del proyecto. Lidera la investigación tecnológica y las decisiones de ingeniería.",
-    initials: "JL",
-  },
-  {
-    name: "Dana Vela",
-    role: "Investigadora · Validación de usuario",
-    bio: "Participa en entrevistas y aporta al proceso investigativo desde la experiencia del usuario, fortaleciendo la validación conceptual del proyecto.",
-    initials: "DV",
-  },
-];
+/* -------------------- equipo y blog: componentes dedicados ---------------- */
 
-function Equipo() {
-  return (
-    <section id="equipo" className="border-y border-border bg-surface/40 py-28">
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="max-w-2xl">
-          <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-cyan">
-            05 · Equipo
-          </div>
-          <h2 className="mt-4 text-4xl font-bold sm:text-5xl">
-            Personas detrás <span className="text-gradient">del movimiento.</span>
-          </h2>
-          <p className="mt-4 text-lg text-muted-foreground">
-            Un equipo del semillero HeroBots del SENA, en Soacha, dedicado a la investigación,
-            documentación, modelado CAD y diseño conceptual de la prótesis LRM.
-          </p>
-        </div>
-        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-          {TEAM.map((m) => (
-            <article
-              key={m.name}
-              className="group panel relative overflow-hidden p-6 transition-all hover:-translate-y-1 hover:border-cyan"
-            >
-              <div className="relative mb-6 aspect-square overflow-hidden rounded-lg bg-navy">
-                <div className="absolute inset-0 bg-grid opacity-30" />
-                <div className="absolute inset-0 grid place-items-center">
-                  <span className="font-display text-6xl font-bold text-gradient">
-                    {m.initials}
-                  </span>
-                </div>
-                <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-cyan to-transparent" />
-              </div>
-              <div className="font-mono text-[10px] uppercase tracking-widest text-cyan">
-                {m.role}
-              </div>
-              <div className="mt-1 font-display text-lg font-semibold">{m.name}</div>
-              <p className="mt-3 max-h-0 overflow-hidden text-sm text-muted-foreground transition-all duration-500 group-hover:max-h-40">
-                {m.bio}
-              </p>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ---------------------------------- blog --------------------------------- */
-const POSTS = [
-  {
-    date: "2026",
-    tag: "Modelado CAD",
-    title: "Modelado de las primeras piezas de la prótesis",
-    excerpt:
-      "Avanzamos en el diseño CAD del conjunto del codo: definimos geometrías, tolerancias y relaciones cinemáticas de las primeras piezas del sistema.",
-  },
-  {
-    date: "2026",
-    tag: "Investigación",
-    title: "Entrevista a Dana Vela, estudiante de grado 11",
-    excerpt:
-      "Dana Vela, estudiante de grado 11 y participante del proceso investigativo, aporta información valiosa para comprender las necesidades reales de las personas con discapacidad de miembro superior.",
-  },
-  {
-    date: "2026",
-    tag: "REDCOLSI",
-    title: "Participación en el Encuentro Nacional e Internacional de Semilleros",
-    excerpt:
-      "Presentamos el proyecto LRM en el Encuentro de Semilleros de Investigación REDCOLSI, realizado en la Universidad de La Salle, Bogotá — un escenario académico clave para el proyecto.",
-  },
-];
-
-function Blog() {
-  return (
-    <section id="blog" className="py-28">
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="mb-12 flex items-end justify-between">
-          <div>
-            <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-cyan">
-              06 · Blog y noticias
-            </div>
-            <h2 className="mt-4 text-4xl font-bold sm:text-5xl">Bitácora del proyecto</h2>
-          </div>
-        </div>
-        <div className="grid gap-6 md:grid-cols-3">
-          {POSTS.map((p) => (
-            <article
-              key={p.title}
-              className="group panel overflow-hidden transition-all hover:-translate-y-1 hover:border-cyan"
-            >
-              <div className="relative aspect-[16/10] overflow-hidden bg-navy">
-                <div className="absolute inset-0 bg-grid opacity-40" />
-                <div className="absolute inset-0 bg-gradient-to-br from-cyan/20 via-transparent to-transparent" />
-                <div className="absolute bottom-3 left-3 rounded border border-cyan/40 bg-background/70 px-2 py-1 font-mono text-[9px] uppercase tracking-widest text-cyan backdrop-blur">
-                  {p.tag}
-                </div>
-              </div>
-              <div className="p-6">
-                <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                  {p.date}
-                </div>
-                <h3 className="mt-2 font-display text-lg font-semibold leading-snug">
-                  {p.title}
-                </h3>
-                <p className="mt-2 text-sm text-muted-foreground">{p.excerpt}</p>
-                <div className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-cyan">
-                  Leer más
-                  <span className="transition-transform group-hover:translate-x-1">→</span>
-                </div>
-              </div>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
 
 /* -------------------------------- glosario ------------------------------- */
 const GLOSSARY = [
@@ -1136,13 +928,16 @@ function Index() {
   return (
     <>
       {intro && <IntroSplash onDone={() => setIntro(false)} />}
-      <Nav dark={dark} toggle={toggle} />
+      <MegaNav dark={dark} toggle={toggle} />
       <main>
         <Hero />
         <Problema />
         <Tecnologia />
         <Investigacion />
+        <Relacion />
         <Sena />
+        <CanvasMaqueta />
+        <Asesores />
         <Equipo />
         <Blog />
         <Glosario />
@@ -1152,3 +947,4 @@ function Index() {
     </>
   );
 }
+
