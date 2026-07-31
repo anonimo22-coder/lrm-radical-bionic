@@ -39,6 +39,12 @@
   --color-cyan: var(--cyan);
   --color-cyan-glow: var(--cyan-glow);
   --color-navy: var(--navy);
+  --color-eco: var(--eco);
+  --color-ai: var(--ai);
+  --color-alert: var(--alert);
+  --color-volt: var(--volt);
+  --color-solar: var(--solar);
+
 
   --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
