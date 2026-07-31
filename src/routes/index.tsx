@@ -1136,13 +1136,16 @@ function Index() {
   return (
     <>
       {intro && <IntroSplash onDone={() => setIntro(false)} />}
-      <Nav dark={dark} toggle={toggle} />
+      <MegaNav dark={dark} toggle={toggle} />
       <main>
         <Hero />
         <Problema />
         <Tecnologia />
         <Investigacion />
+        <Relacion />
         <Sena />
+        <CanvasMaqueta />
+        <Asesores />
         <Equipo />
         <Blog />
         <Glosario />
@@ -1152,3 +1155,4 @@ function Index() {
     </>
   );
 }
+
