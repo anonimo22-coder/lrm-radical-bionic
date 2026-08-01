@@ -11,7 +11,7 @@ export function Relacion() {
       accentText: "text-eco",
       chip: "border-eco/30 bg-eco/10 text-eco",
       bar: "from-eco to-cyan",
-      desc: "Es el espacio científico donde nace y se sostiene LRM Robotics. Allí se formula el problema de investigación, se construye la metodología, se estudian los parámetros biomecánicos y se valida el diseño con usuarios reales.",
+      desc: "Semillero investigativo de la Institución Educativa Soacha Para Vivir Mejor. Es el espacio científico donde nace y se sostiene LRM Robotics: allí se formula el problema de investigación, se construye la metodología, se estudian los parámetros biomecánicos y se valida el diseño con usuarios reales.",
       bullets: ["Pregunta y objetivos de investigación", "Metodología y rigor científico", "Modelado CAD y validación con usuario"],
     },
     {
@@ -37,9 +37,13 @@ export function Relacion() {
             Dos procesos, <span className="text-gradient">un mismo proyecto.</span>
           </h2>
           <p className="mt-4 text-muted-foreground">
-            LRM Robotics avanza sobre dos vías complementarias: la investigación científica del
-            semillero y la formación empresarial del SENA.
+            LRM Robotics avanza sobre dos vías complementarias y con el mismo peso: la investigación
+            científica del semillero HeroBots —de la Institución Educativa Soacha Para Vivir Mejor— y
+            la formación empresarial del SENA. HeroBots no pertenece al SENA: son procesos distintos
+            que se articulan en un solo proyecto.
           </p>
+
+
         </div>
 
         <div className="mt-12 grid items-stretch gap-6 lg:grid-cols-[1fr_auto_1fr]">

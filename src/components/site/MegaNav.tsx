@@ -166,8 +166,9 @@ const MENUS: MenuGroup[] = [
     items: [
       { label: "Noticias", href: "#blog", desc: "Lo último del desarrollo de LRM.", accent: "cyan", icon: I.news },
       { label: "Investigaciones", href: "#blog", desc: "Entrevistas y hallazgos con usuarios reales.", accent: "ai", icon: I.flask },
-      { label: "Eventos", href: "#blog", desc: "Encuentros académicos como REDCOLSI.", accent: "eco", icon: I.cal },
-      { label: "Bitácora CAD", href: "#blog", desc: "El diario del modelado de las primeras piezas.", accent: "volt", icon: I.cad },
+      { label: "Galería", href: "#impacto", desc: "La tecnología cobra vida: registro visual del proyecto.", accent: "eco", icon: I.cal },
+      { label: "Planos CAD", href: "#cad", desc: "El diario del modelado de las primeras piezas.", accent: "volt", icon: I.cad },
+
     ],
   },
   {

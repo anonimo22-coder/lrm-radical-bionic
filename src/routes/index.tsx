@@ -4,15 +4,16 @@ import logoDark from "@/assets/logo-dark.png.asset.json";
 import logoLight from "@/assets/logo-light.png.asset.json";
 import lrmLogo from "@/assets/lrm-logo.png.asset.json";
 import heroArm from "@/assets/hero-arm.jpg.asset.json";
-import pieza13 from "@/assets/pieza-13.png.asset.json";
-import pieza15 from "@/assets/pieza-15.png.asset.json";
-import pieza16 from "@/assets/pieza-16.png.asset.json";
-import pieza17 from "@/assets/pieza-17.png.asset.json";
-import pieza18 from "@/assets/pieza-18.png.asset.json";
 import { MegaNav } from "@/components/site/MegaNav";
 import { Equipo } from "@/components/site/Equipo";
 import { Blog } from "@/components/site/Blog";
+import { Galeria } from "@/components/site/Galeria";
+import { PlanosCad } from "@/components/site/PlanosCad";
 import { Relacion, CanvasMaqueta, Asesores } from "@/components/site/SenaExtras";
+import { CursorFX } from "@/components/visual/CursorFX";
+import { useMagnetic } from "@/components/visual/Reveal";
+import Strands from "@/components/visual/Strands";
+
 
 
 export const Route = createFileRoute("/")({
@@ -104,11 +105,17 @@ function IntroSplash({ onDone }: { onDone: () => void }) {
 
 /* ---------------------------------- hero --------------------------------- */
 function Hero() {
+  const magnetPrimary = useMagnetic<HTMLAnchorElement>(10);
+  const magnetSecondary = useMagnetic<HTMLAnchorElement>(8);
   return (
     <section id="top" className="relative overflow-hidden bg-hero">
+      {/* Ferrofluid / Strands — hilos de luz en movimiento */}
+      <div className="pointer-events-none absolute inset-0 opacity-70">
+        <Strands colors={["#06B6D4", "#3B82F6", "#A5F3FC"]} count={4} speed={0.3} />
+      </div>
       <div className="absolute inset-0 bg-grid opacity-30" />
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan/60 to-transparent" />
-      <div className="mx-auto grid max-w-7xl gap-16 px-6 pt-20 pb-32 lg:grid-cols-[1.1fr_1fr] lg:items-center lg:pt-28">
+      <div className="relative mx-auto grid max-w-7xl gap-16 px-6 pt-20 pb-32 lg:grid-cols-[1.1fr_1fr] lg:items-center lg:pt-28">
         <div className="animate-assemble">
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-cyan/30 bg-cyan/5 px-3 py-1">
             <span className="size-1.5 rounded-full bg-cyan animate-pulse-dot" />
@@ -125,12 +132,16 @@ function Hero() {
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
             Investigamos y desarrollamos prótesis biónicas de brazo{" "}
             <span className="text-foreground">basadas en economía circular, modelado CAD e IA adaptativa</span>,
-            desde el semillero HeroBots del SENA en Soacha, Cundinamarca.
+            desde <span className="text-foreground">HeroBots</span>, el semillero investigativo de la
+            Institución Educativa Soacha Para Vivir Mejor, en Soacha, Cundinamarca. Nuestro proceso de
+            formación empresarial se desarrolla con el <span className="text-foreground">SENA</span>.
           </p>
+
           <div className="mt-10 flex flex-wrap gap-3">
             <a
+              ref={magnetPrimary}
               href="#tecnologia"
-              className="group inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground shadow-[0_10px_40px_-10px_var(--cyan)] transition-transform hover:scale-[1.02]"
+              className="group inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground shadow-[0_10px_40px_-10px_var(--cyan)] transition-shadow hover:shadow-[0_16px_50px_-8px_var(--cyan)]"
             >
               Conoce nuestra tecnología
               <svg viewBox="0 0 24 24" className="size-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" strokeWidth="2">
@@ -138,11 +149,13 @@ function Hero() {
               </svg>
             </a>
             <a
+              ref={magnetSecondary}
               href="#investigacion"
               className="inline-flex items-center gap-2 rounded-md border border-border bg-surface px-6 py-3.5 text-sm font-semibold text-foreground transition-colors hover:border-cyan"
             >
               Ver la investigación
             </a>
+
           </div>
           <div className="mt-12 flex gap-8 border-t border-border pt-6 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
             <div>
@@ -267,13 +280,6 @@ function Tecnologia() {
       ),
     },
   ];
-  const parts = [
-    { img: pieza13.url, code: "PIEZA 13", name: "Eje de rotación del codo" },
-    { img: pieza15.url, code: "PIEZA 15", name: "Cubierta lateral del codo" },
-    { img: pieza16.url, code: "PIEZA 16", name: "Soporte del servomotor" },
-    { img: pieza17.url, code: "PIEZA 17", name: "Piñón de transmisión" },
-    { img: pieza18.url, code: "PIEZA 18", name: "Limitador de ángulo" },
-  ];
   return (
     <section id="tecnologia" className="py-28">
       <div className="mx-auto max-w-7xl px-6">
@@ -313,47 +319,8 @@ function Tecnologia() {
             </article>
           ))}
         </div>
-
-        {/* Technical renders */}
-        <div className="mt-24">
-          <div className="mb-8 flex items-end justify-between">
-            <div>
-              <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-cyan">
-                ▸ Modelado CAD
-              </div>
-              <h3 className="mt-2 font-display text-2xl font-semibold">
-                Ingeniería en cada milímetro
-              </h3>
-            </div>
-            <div className="hidden font-mono text-[10px] uppercase tracking-widest text-muted-foreground sm:block">
-              CONJUNTO CODO · REV 1.0
-            </div>
-          </div>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-            {parts.map((p) => (
-              <figure
-                key={p.code}
-                className="group panel overflow-hidden transition-all hover:border-cyan"
-              >
-                <div className="aspect-[4/3] overflow-hidden bg-white">
-                  <img
-                    src={p.img}
-                    alt={p.name}
-                    loading="lazy"
-                    className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                </div>
-                <figcaption className="border-t border-border p-4">
-                  <div className="font-mono text-[9px] uppercase tracking-widest text-cyan">
-                    {p.code}
-                  </div>
-                  <div className="mt-1 text-sm font-medium">{p.name}</div>
-                </figcaption>
-              </figure>
-            ))}
-          </div>
-        </div>
       </div>
+
     </section>
   );
 }
@@ -928,6 +895,7 @@ function Index() {
   return (
     <>
       {intro && <IntroSplash onDone={() => setIntro(false)} />}
+      <CursorFX />
       <MegaNav dark={dark} toggle={toggle} />
       <main>
         <Hero />
@@ -940,9 +908,12 @@ function Index() {
         <Asesores />
         <Equipo />
         <Blog />
+        <Galeria />
+        <PlanosCad />
         <Glosario />
         <Contacto />
       </main>
+
       <Footer dark={dark} />
     </>
   );
