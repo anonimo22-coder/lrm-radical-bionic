@@ -41,6 +41,8 @@ export function Relacion() {
             científica del semillero HeroBots —de la Institución Educativa Soacha Para Vivir Mejor— y
             la formación empresarial del SENA. HeroBots no pertenece al SENA: son procesos distintos
             que se articulan en un solo proyecto.
+          </p>
+
 
         </div>
 
