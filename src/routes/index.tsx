@@ -11,7 +11,7 @@ import { Galeria } from "@/components/site/Galeria";
 import { PlanosCad } from "@/components/site/PlanosCad";
 import { Relacion, CanvasMaqueta, Asesores } from "@/components/site/SenaExtras";
 import { CursorFX } from "@/components/visual/CursorFX";
-import { Reveal, useMagnetic } from "@/components/visual/Reveal";
+import { useMagnetic } from "@/components/visual/Reveal";
 import Strands from "@/components/visual/Strands";
 
 
