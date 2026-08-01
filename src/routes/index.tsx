@@ -895,6 +895,7 @@ function Index() {
   return (
     <>
       {intro && <IntroSplash onDone={() => setIntro(false)} />}
+      <CursorFX />
       <MegaNav dark={dark} toggle={toggle} />
       <main>
         <Hero />
@@ -907,9 +908,12 @@ function Index() {
         <Asesores />
         <Equipo />
         <Blog />
+        <Galeria />
+        <PlanosCad />
         <Glosario />
         <Contacto />
       </main>
+
       <Footer dark={dark} />
     </>
   );
