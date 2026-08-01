@@ -267,13 +267,6 @@ function Tecnologia() {
       ),
     },
   ];
-  const parts = [
-    { img: pieza13.url, code: "PIEZA 13", name: "Eje de rotación del codo" },
-    { img: pieza15.url, code: "PIEZA 15", name: "Cubierta lateral del codo" },
-    { img: pieza16.url, code: "PIEZA 16", name: "Soporte del servomotor" },
-    { img: pieza17.url, code: "PIEZA 17", name: "Piñón de transmisión" },
-    { img: pieza18.url, code: "PIEZA 18", name: "Limitador de ángulo" },
-  ];
   return (
     <section id="tecnologia" className="py-28">
       <div className="mx-auto max-w-7xl px-6">
