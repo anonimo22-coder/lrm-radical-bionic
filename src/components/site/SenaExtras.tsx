@@ -37,9 +37,11 @@ export function Relacion() {
             Dos procesos, <span className="text-gradient">un mismo proyecto.</span>
           </h2>
           <p className="mt-4 text-muted-foreground">
-            LRM Robotics avanza sobre dos vías complementarias: la investigación científica del
-            semillero y la formación empresarial del SENA.
-          </p>
+            LRM Robotics avanza sobre dos vías complementarias y con el mismo peso: la investigación
+            científica del semillero HeroBots —de la Institución Educativa Soacha Para Vivir Mejor— y
+            la formación empresarial del SENA. HeroBots no pertenece al SENA: son procesos distintos
+            que se articulan en un solo proyecto.
+
         </div>
 
         <div className="mt-12 grid items-stretch gap-6 lg:grid-cols-[1fr_auto_1fr]">
