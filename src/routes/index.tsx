@@ -313,47 +313,8 @@ function Tecnologia() {
             </article>
           ))}
         </div>
-
-        {/* Technical renders */}
-        <div className="mt-24">
-          <div className="mb-8 flex items-end justify-between">
-            <div>
-              <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-cyan">
-                ▸ Modelado CAD
-              </div>
-              <h3 className="mt-2 font-display text-2xl font-semibold">
-                Ingeniería en cada milímetro
-              </h3>
-            </div>
-            <div className="hidden font-mono text-[10px] uppercase tracking-widest text-muted-foreground sm:block">
-              CONJUNTO CODO · REV 1.0
-            </div>
-          </div>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-            {parts.map((p) => (
-              <figure
-                key={p.code}
-                className="group panel overflow-hidden transition-all hover:border-cyan"
-              >
-                <div className="aspect-[4/3] overflow-hidden bg-white">
-                  <img
-                    src={p.img}
-                    alt={p.name}
-                    loading="lazy"
-                    className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                </div>
-                <figcaption className="border-t border-border p-4">
-                  <div className="font-mono text-[9px] uppercase tracking-widest text-cyan">
-                    {p.code}
-                  </div>
-                  <div className="mt-1 text-sm font-medium">{p.name}</div>
-                </figcaption>
-              </figure>
-            ))}
-          </div>
-        </div>
       </div>
+
     </section>
   );
 }
