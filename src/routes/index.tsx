@@ -139,8 +139,9 @@ function Hero() {
 
           <div className="mt-10 flex flex-wrap gap-3">
             <a
+              ref={magnetPrimary}
               href="#tecnologia"
-              className="group inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground shadow-[0_10px_40px_-10px_var(--cyan)] transition-transform hover:scale-[1.02]"
+              className="group inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground shadow-[0_10px_40px_-10px_var(--cyan)] transition-shadow hover:shadow-[0_16px_50px_-8px_var(--cyan)]"
             >
               Conoce nuestra tecnología
               <svg viewBox="0 0 24 24" className="size-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" strokeWidth="2">
@@ -148,11 +149,13 @@ function Hero() {
               </svg>
             </a>
             <a
+              ref={magnetSecondary}
               href="#investigacion"
               className="inline-flex items-center gap-2 rounded-md border border-border bg-surface px-6 py-3.5 text-sm font-semibold text-foreground transition-colors hover:border-cyan"
             >
               Ver la investigación
             </a>
+
           </div>
           <div className="mt-12 flex gap-8 border-t border-border pt-6 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
             <div>
