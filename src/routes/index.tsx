@@ -105,11 +105,17 @@ function IntroSplash({ onDone }: { onDone: () => void }) {
 
 /* ---------------------------------- hero --------------------------------- */
 function Hero() {
+  const magnetPrimary = useMagnetic<HTMLAnchorElement>(10);
+  const magnetSecondary = useMagnetic<HTMLAnchorElement>(8);
   return (
     <section id="top" className="relative overflow-hidden bg-hero">
+      {/* Ferrofluid / Strands — hilos de luz en movimiento */}
+      <div className="pointer-events-none absolute inset-0 opacity-70">
+        <Strands colors={["#06B6D4", "#3B82F6", "#A5F3FC"]} count={4} speed={0.3} />
+      </div>
       <div className="absolute inset-0 bg-grid opacity-30" />
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan/60 to-transparent" />
-      <div className="mx-auto grid max-w-7xl gap-16 px-6 pt-20 pb-32 lg:grid-cols-[1.1fr_1fr] lg:items-center lg:pt-28">
+      <div className="relative mx-auto grid max-w-7xl gap-16 px-6 pt-20 pb-32 lg:grid-cols-[1.1fr_1fr] lg:items-center lg:pt-28">
         <div className="animate-assemble">
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-cyan/30 bg-cyan/5 px-3 py-1">
             <span className="size-1.5 rounded-full bg-cyan animate-pulse-dot" />
@@ -126,8 +132,11 @@ function Hero() {
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
             Investigamos y desarrollamos prótesis biónicas de brazo{" "}
             <span className="text-foreground">basadas en economía circular, modelado CAD e IA adaptativa</span>,
-            desde el semillero HeroBots del SENA en Soacha, Cundinamarca.
+            desde <span className="text-foreground">HeroBots</span>, el semillero investigativo de la
+            Institución Educativa Soacha Para Vivir Mejor, en Soacha, Cundinamarca. Nuestro proceso de
+            formación empresarial se desarrolla con el <span className="text-foreground">SENA</span>.
           </p>
+
           <div className="mt-10 flex flex-wrap gap-3">
             <a
               href="#tecnologia"
