@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 type Accent = "cyan" | "eco" | "volt";
 
@@ -19,30 +20,36 @@ type Member = {
 const accent = {
   cyan: {
     text: "text-cyan",
-    border: "hover:border-cyan",
-    ring: "group-hover:ring-glow-volt",
-    grad: "from-cyan/25 via-transparent to-transparent",
+    border: "hover:border-cyan/60 focus-visible:border-cyan",
+    grad: "from-cyan/20 via-transparent to-transparent",
     dot: "bg-cyan",
     chip: "border-cyan/30 bg-cyan/10 text-cyan",
     bar: "from-cyan to-volt",
+    glow: "shadow-[0_0_80px_-20px_var(--cyan)]",
+    line: "bg-gradient-to-r from-cyan to-volt",
+    badge: "border-cyan/40 bg-cyan/10 text-cyan",
   },
   eco: {
     text: "text-eco",
-    border: "hover:border-eco",
-    ring: "group-hover:ring-glow-eco",
-    grad: "from-eco/25 via-transparent to-transparent",
+    border: "hover:border-eco/60 focus-visible:border-eco",
+    grad: "from-eco/20 via-transparent to-transparent",
     dot: "bg-eco",
     chip: "border-eco/30 bg-eco/10 text-eco",
     bar: "from-eco to-cyan",
+    glow: "shadow-[0_0_80px_-20px_var(--eco)]",
+    line: "bg-gradient-to-r from-eco to-cyan",
+    badge: "border-eco/40 bg-eco/10 text-eco",
   },
   volt: {
     text: "text-volt",
-    border: "hover:border-volt",
-    ring: "group-hover:ring-glow-volt",
-    grad: "from-volt/25 via-transparent to-transparent",
+    border: "hover:border-volt/60 focus-visible:border-volt",
+    grad: "from-volt/20 via-transparent to-transparent",
     dot: "bg-volt",
     chip: "border-volt/30 bg-volt/10 text-volt",
     bar: "from-volt to-cyan",
+    glow: "shadow-[0_0_80px_-20px_var(--volt)]",
+    line: "bg-gradient-to-r from-volt to-cyan",
+    badge: "border-volt/40 bg-volt/10 text-volt",
   },
 } satisfies Record<Accent, Record<string, string>>;
 
@@ -162,22 +169,168 @@ export const TEAM: Member[] = [
   },
 ];
 
+function MemberModal({ member, onClose }: { member: Member; onClose: () => void }) {
+  const a = accent[member.accent];
+  const overlayRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    window.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
+  }, [onClose]);
+
+  return createPortal(
+    <div
+      ref={overlayRef}
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6"
+      style={{ animation: "fadeIn 150ms ease both" }}
+    >
+      {/* Backdrop */}
+      <div
+        className="absolute inset-0 bg-background/80 backdrop-blur-md"
+        onClick={onClose}
+        aria-hidden="true"
+      />
+
+      {/* Modal */}
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={`Perfil de ${member.short}`}
+        className={`relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl border border-border bg-background ${a.glow}`}
+        style={{ animation: "modalIn 200ms cubic-bezier(0.16,1,0.3,1) both" }}
+      >
+        {/* Top accent line */}
+        <div className={`h-[3px] w-full rounded-t-2xl ${a.line}`} />
+
+        {/* Close button */}
+        <button
+          onClick={onClose}
+          aria-label="Cerrar"
+          className="absolute right-4 top-4 z-10 grid size-8 place-items-center rounded-lg border border-border bg-surface text-muted-foreground transition-colors hover:border-cyan hover:text-cyan"
+        >
+          <svg viewBox="0 0 24 24" className="size-3.5" fill="none" stroke="currentColor" strokeWidth="2.5">
+            <path d="M6 6l12 12M18 6L6 18" strokeLinecap="round" />
+          </svg>
+        </button>
+
+        {/* Header */}
+        <div className="px-6 pb-5 pt-6">
+          <div className="flex gap-5">
+            {/* Photo placeholder */}
+            <div className="shrink-0">
+              <div className="relative size-24 sm:size-28 overflow-hidden rounded-xl border-2 border-dashed border-border bg-surface/60">
+                {/* Grid background */}
+                <div className="absolute inset-0 bg-grid opacity-20" />
+                {/* Gradient overlay */}
+                <div className={`absolute inset-0 bg-gradient-to-br ${a.grad}`} />
+                {/* Initials fallback */}
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-1">
+                  <span className="font-display text-3xl sm:text-4xl font-bold text-gradient leading-none">
+                    {member.initials}
+                  </span>
+                  <span className="font-mono text-[7px] uppercase tracking-[0.2em] text-muted-foreground/50">
+                    foto próx.
+                  </span>
+                </div>
+                {/* Bottom line */}
+                <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-cyan/40 to-transparent" />
+              </div>
+            </div>
+
+            {/* Name / role / kicker */}
+            <div className="min-w-0 flex-1 pt-1">
+              <div className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 font-mono text-[9px] uppercase tracking-[0.2em] ${a.chip}`}>
+                <span className={`size-1.5 rounded-full ${a.dot} animate-pulse-dot`} />
+                {member.kicker}
+              </div>
+              <h3 className="mt-2 font-display text-xl sm:text-2xl font-bold leading-tight">
+                {member.name}
+              </h3>
+              <p className={`mt-1 font-mono text-[10px] uppercase leading-relaxed tracking-widest ${a.text}`}>
+                {member.role}
+              </p>
+              {/* Badges */}
+              <div className="mt-3 flex flex-wrap gap-1.5">
+                {member.badges.map((b) => (
+                  <span
+                    key={b.label}
+                    className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[11px] font-medium ${a.badge}`}
+                  >
+                    <span aria-hidden>{b.icon}</span>
+                    {b.label}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Headline quote */}
+          <blockquote className="mt-5 rounded-lg border border-border/50 bg-surface/40 px-5 py-3.5">
+            <p className={`font-display text-sm italic leading-relaxed ${a.text}`}>
+              «{member.headline}»
+            </p>
+          </blockquote>
+        </div>
+
+        {/* Divider */}
+        <div className="mx-6 h-px bg-border/50" />
+
+        {/* Body */}
+        <div className="space-y-5 px-6 py-5">
+          {/* Bio */}
+          <div>
+            <div className={`mb-2 font-mono text-[9px] uppercase tracking-[0.3em] ${a.text}`}>
+              Perfil
+            </div>
+            <p className="text-sm leading-relaxed text-muted-foreground">{member.bio}</p>
+          </div>
+
+          {/* Strengths */}
+          <div>
+            <div className={`mb-3 font-mono text-[9px] uppercase tracking-[0.3em] ${a.text}`}>
+              Fortalezas
+            </div>
+            <div className="grid gap-2.5 sm:grid-cols-2">
+              {member.strengths.map((s) => (
+                <div key={s.title} className="rounded-lg border border-border/60 bg-surface/50 p-3.5">
+                  <div className="flex items-center gap-2">
+                    <span className={`size-1.5 shrink-0 rounded-full ${a.dot}`} />
+                    <span className="text-sm font-semibold leading-tight">{s.title}</span>
+                  </div>
+                  <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">{s.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Contribution */}
+          <div className="relative overflow-hidden rounded-lg border border-border/60 bg-surface/40 p-4">
+            <div className={`absolute inset-y-0 left-0 w-[3px] rounded-l-lg ${a.line}`} />
+            <div className={`pl-3 font-mono text-[9px] uppercase tracking-[0.3em] ${a.text}`}>
+              Aporte al proyecto
+            </div>
+            <p className="mt-2 pl-3 text-sm leading-relaxed text-foreground/90">{member.contribution}</p>
+          </div>
+        </div>
+      </div>
+
+      <style>{`
+        @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
+        @keyframes modalIn { from { opacity: 0; transform: scale(0.96) translateY(8px) } to { opacity: 1; transform: scale(1) translateY(0) } }
+      `}</style>
+    </div>,
+    document.body,
+  );
+}
+
 export function Equipo() {
   const [openIdx, setOpenIdx] = useState<number | null>(null);
   const m = openIdx === null ? null : TEAM[openIdx];
-
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpenIdx(null);
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, []);
-
-  useEffect(() => {
-    document.body.style.overflow = openIdx !== null ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [openIdx]);
 
   return (
     <section id="equipo" className="relative overflow-hidden border-y border-border bg-surface/40 py-28">
@@ -197,11 +350,11 @@ export function Equipo() {
             <span className="text-volt">SENA</span>.
           </p>
           <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
-            ▸ Pasa el cursor o toca una tarjeta para abrir su perfil
+            ▸ Haz clic en una tarjeta para ver el perfil completo
           </p>
         </div>
 
-        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
           {TEAM.map((mem, i) => {
             const a = accent[mem.accent];
             return (
@@ -212,34 +365,39 @@ export function Equipo() {
                 aria-label={`Ver perfil de ${mem.short}`}
                 onClick={() => setOpenIdx(i)}
                 onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && (e.preventDefault(), setOpenIdx(i))}
-                className={`group panel card-sheen relative cursor-pointer p-6 transition-all duration-500 hover:-translate-y-2 focus:outline-none focus-visible:border-cyan ${a.border} ${a.ring}`}
+                className={`group panel card-sheen relative cursor-pointer p-5 transition-all duration-200 hover:-translate-y-1.5 focus:outline-none ${a.border}`}
               >
-                <div className={`absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r ${a.bar} opacity-0 transition-opacity duration-500 group-hover:opacity-100`} />
-                <div className="relative mb-5 aspect-square overflow-hidden rounded-lg bg-navy">
+                {/* Top gradient bar on hover */}
+                <div className={`absolute inset-x-0 top-0 h-[2px] rounded-t-[inherit] bg-gradient-to-r ${a.bar} opacity-0 transition-opacity duration-200 group-hover:opacity-100`} />
+
+                {/* Avatar */}
+                <div className="relative mb-4 aspect-square overflow-hidden rounded-lg bg-navy">
                   <div className="absolute inset-0 bg-grid opacity-30" />
-                  <div className={`absolute inset-0 bg-gradient-to-br ${a.grad} transition-opacity duration-500 group-hover:opacity-100`} />
+                  <div className={`absolute inset-0 bg-gradient-to-br ${a.grad} opacity-0 transition-opacity duration-200 group-hover:opacity-100`} />
                   <div className="absolute inset-0 grid place-items-center">
-                    <span className="font-display text-6xl font-bold text-gradient transition-transform duration-500 group-hover:scale-110">
+                    <span className="font-display text-5xl font-bold text-gradient transition-transform duration-200 group-hover:scale-105">
                       {mem.initials}
                     </span>
                   </div>
-                  <div className={`absolute left-3 top-3 flex items-center gap-1.5 rounded-full border px-2 py-0.5 font-mono text-[8px] uppercase tracking-[0.2em] backdrop-blur ${a.chip}`}>
+                  <div className={`absolute left-2.5 top-2.5 flex items-center gap-1.5 rounded-full border px-2 py-0.5 font-mono text-[8px] uppercase tracking-[0.15em] backdrop-blur ${a.chip}`}>
                     <span className={`size-1 rounded-full ${a.dot} animate-pulse-dot`} />
                     {mem.kicker}
                   </div>
-                  <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-cyan to-transparent" />
+                  <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-cyan/40 to-transparent" />
                 </div>
 
-                <div className={`font-mono text-[10px] uppercase leading-relaxed tracking-widest ${a.text}`}>
+                {/* Info */}
+                <div className={`font-mono text-[9px] uppercase leading-relaxed tracking-widest ${a.text}`}>
                   {mem.role}
                 </div>
-                <div className="mt-1 font-display text-lg font-semibold">{mem.short}</div>
+                <div className="mt-1 font-display text-base font-semibold leading-snug">{mem.short}</div>
 
-                <div className="mt-3 flex flex-wrap gap-1.5">
+                {/* Badges */}
+                <div className="mt-2.5 flex flex-wrap gap-1">
                   {mem.badges.map((b) => (
                     <span
                       key={b.label}
-                      className="inline-flex items-center gap-1 rounded-full border border-border bg-surface/70 px-2 py-0.5 text-[10px] text-muted-foreground"
+                      className="inline-flex items-center gap-1 rounded-full border border-border bg-surface/70 px-1.5 py-0.5 text-[9px] text-muted-foreground"
                     >
                       <span aria-hidden>{b.icon}</span>
                       {b.label}
@@ -247,15 +405,10 @@ export function Equipo() {
                   ))}
                 </div>
 
-                <div className="mt-4 grid transition-all duration-500 grid-rows-[0fr] opacity-0 group-hover:grid-rows-[1fr] group-hover:opacity-100 group-focus-visible:grid-rows-[1fr] group-focus-visible:opacity-100">
-                  <div className="overflow-hidden">
-                    <p className="text-sm leading-relaxed text-muted-foreground">{mem.headline}</p>
-                  </div>
-                </div>
-
-                <div className={`mt-4 inline-flex items-center gap-2 text-xs font-semibold ${a.text}`}>
-                  Ver perfil completo
-                  <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
+                {/* CTA */}
+                <div className={`mt-3.5 inline-flex items-center gap-1.5 text-[11px] font-semibold ${a.text}`}>
+                  Ver perfil
+                  <span className="transition-transform duration-200 group-hover:translate-x-0.5">→</span>
                 </div>
               </article>
             );
@@ -263,104 +416,8 @@ export function Equipo() {
         </div>
       </div>
 
-      {/* Panel lateral */}
       {m !== null && (
-        <div className="fixed inset-0 z-[90] flex justify-end">
-          <button
-            aria-label="Cerrar perfil"
-            onClick={() => setOpenIdx(null)}
-            className="absolute inset-0 bg-background/70 backdrop-blur-sm"
-          />
-          <aside
-            role="dialog"
-            aria-modal="true"
-            aria-label={`Perfil de ${m.short}`}
-            className="animate-drawer-in relative ml-auto flex h-full w-full max-w-xl flex-col overflow-y-auto border-l border-border bg-background shadow-[0_0_120px_-20px_var(--cyan)]"
-          >
-            <div className={`h-1 w-full bg-gradient-to-r ${accent[m.accent].bar}`} />
-            <div className="relative overflow-hidden px-7 pb-6 pt-7">
-              <div className={`pointer-events-none absolute -right-16 -top-16 size-56 rounded-full bg-gradient-to-br ${accent[m.accent].grad} blur-3xl`} />
-              <button
-                onClick={() => setOpenIdx(null)}
-                aria-label="Cerrar"
-                className="absolute right-5 top-5 grid size-9 place-items-center rounded-md border border-border bg-surface text-muted-foreground transition-colors hover:border-cyan hover:text-cyan"
-              >
-                <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M6 6l12 12M18 6L6 18" strokeLinecap="round" />
-                </svg>
-              </button>
-
-              <div className="relative flex items-center gap-4">
-                <div className="relative grid size-20 shrink-0 place-items-center overflow-hidden rounded-xl bg-navy">
-                  <div className="absolute inset-0 bg-grid opacity-40" />
-                  <span className="relative font-display text-3xl font-bold text-gradient">
-                    {m.initials}
-                  </span>
-                </div>
-                <div className="min-w-0">
-                  <div className={`font-mono text-[10px] uppercase tracking-[0.25em] ${accent[m.accent].text}`}>
-                    {m.role}
-                  </div>
-                  <h3 className="mt-1 font-display text-2xl font-bold leading-tight">{m.name}</h3>
-                </div>
-              </div>
-
-              <div className="relative mt-5 flex flex-wrap gap-2">
-                {m.badges.map((b) => (
-                  <span
-                    key={b.label}
-                    className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium ${accent[m.accent].chip}`}
-                  >
-                    <span aria-hidden>{b.icon}</span>
-                    {b.label}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            <div className="space-y-6 px-7 pb-10">
-              <p className="font-display text-lg italic leading-snug text-foreground/90">
-                «{m.headline}»
-              </p>
-
-              <div className="panel p-5">
-                <div className={`font-mono text-[10px] uppercase tracking-[0.3em] ${accent[m.accent].text}`}>
-                  Perfil
-                </div>
-                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{m.bio}</p>
-              </div>
-
-              <div>
-                <div className={`mb-3 font-mono text-[10px] uppercase tracking-[0.3em] ${accent[m.accent].text}`}>
-                  Fortalezas
-                </div>
-                <div className="grid gap-3 sm:grid-cols-2">
-                  {m.strengths.map((s, i) => (
-                    <div
-                      key={s.title}
-                      className="panel animate-panel-in p-4 transition-transform hover:-translate-y-0.5"
-                      style={{ animationDelay: `${i * 70}ms` }}
-                    >
-                      <div className="flex items-center gap-2">
-                        <span className={`size-1.5 rounded-full ${accent[m.accent].dot}`} />
-                        <span className="text-sm font-semibold">{s.title}</span>
-                      </div>
-                      <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{s.desc}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="panel relative overflow-hidden p-5">
-                <div className={`absolute inset-y-0 left-0 w-1 bg-gradient-to-b ${accent[m.accent].bar}`} />
-                <div className={`font-mono text-[10px] uppercase tracking-[0.3em] ${accent[m.accent].text}`}>
-                  ▸ Aporte al proyecto
-                </div>
-                <p className="mt-3 text-sm leading-relaxed text-foreground/90">{m.contribution}</p>
-              </div>
-            </div>
-          </aside>
-        </div>
+        <MemberModal member={m} onClose={() => setOpenIdx(null)} />
       )}
     </section>
   );
