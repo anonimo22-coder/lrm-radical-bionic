@@ -201,10 +201,15 @@ function Hero() {
 /* ------------------------------- problema -------------------------------- */
 function Problema() {
   const stats = [
-    { n: "425+", label: "Días de espera promedio", sub: "Más de un año sin autonomía." },
-    { n: "$30–100M", label: "Costo en COP", sub: "Fuera del alcance de la mayoría." },
-    { n: "1 de cada 3", label: "Personas sin acceso", sub: "A prótesis de calidad en LATAM." },
-  ];
+    { n: "425+", label: "Días de espera promedio", sub: "Más de un año sin autonomía.", accent: "cyan" },
+    { n: "$30–100M", label: "Costo en COP", sub: "Fuera del alcance de la mayoría.", accent: "volt" },
+    { n: "1 / 3", label: "Personas sin acceso", sub: "A prótesis de calidad en LATAM.", accent: "eco" },
+  ] as const;
+  const accentMap = {
+    cyan: { bar: "from-cyan to-volt", text: "text-cyan", sub: "text-cyan/60" },
+    volt: { bar: "from-volt to-cyan", text: "text-volt", sub: "text-volt/60" },
+    eco:  { bar: "from-eco to-cyan",  text: "text-eco",  sub: "text-eco/60"  },
+  };
   return (
     <section className="relative border-y border-border bg-surface/40 py-24">
       <div className="mx-auto max-w-7xl px-6">
@@ -214,7 +219,7 @@ function Problema() {
               01 · El problema
             </div>
             <h2 className="mt-4 text-4xl font-bold sm:text-5xl">
-              Detrás de cada cifra <br />
+              Detrás de cada cifra <br className="hidden sm:inline" />
               hay una vida en pausa.
             </h2>
             <p className="mt-6 max-w-md text-lg text-muted-foreground">
@@ -224,16 +229,20 @@ function Problema() {
             </p>
           </div>
           <div className="grid gap-4 sm:grid-cols-3">
-            {stats.map((s) => (
-              <div
-                key={s.label}
-                className="group panel p-6 transition-all hover:-translate-y-1 hover:border-cyan"
-              >
-                <div className="text-gradient font-display text-4xl font-bold">{s.n}</div>
-                <div className="mt-3 text-sm font-semibold">{s.label}</div>
-                <div className="mt-1 text-xs text-muted-foreground">{s.sub}</div>
-              </div>
-            ))}
+            {stats.map((s) => {
+              const a = accentMap[s.accent];
+              return (
+                <div
+                  key={s.label}
+                  className="panel relative overflow-hidden p-5 transition-all duration-200 hover:-translate-y-1"
+                >
+                  <div className={`absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r ${a.bar}`} />
+                  <div className={`font-display text-3xl font-bold leading-none ${a.text}`}>{s.n}</div>
+                  <div className="mt-3 text-sm font-semibold leading-snug text-foreground">{s.label}</div>
+                  <div className={`mt-1 text-xs leading-snug ${a.sub}`}>{s.sub}</div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -503,22 +512,22 @@ function Sena() {
   const timeline = [
     {
       year: "2025",
-      label: "Nacimiento de la idea",
+      label: "Ideación",
       desc: "La idea de LRM nace dentro del SENA como respuesta a una necesidad social real.",
     },
     {
       year: "2025",
-      label: "Consolidación del proyecto",
+      label: "Consolidación",
       desc: "Consolidación del proyecto empresarial y desarrollo del marco conceptual.",
     },
     {
       year: "2026",
-      label: "Desarrollo investigativo-empresarial",
+      label: "Desarrollo",
       desc: "Modelo organizacional, estructura administrativa, documentación, fortalecimiento del modelo de negocio y desarrollo técnico.",
     },
     {
       year: "2027+",
-      label: "Escalamiento",
+      label: "Escala",
       desc: "Expansión tecnológica, fortalecimiento de la investigación y nuevas líneas de innovación.",
     },
   ];
@@ -722,10 +731,10 @@ function Contacto() {
               <a
                 key={e}
                 href={`mailto:${e}`}
-                className="group flex items-center gap-3 rounded-md border border-border bg-surface px-4 py-3 font-mono text-sm text-foreground transition-colors hover:border-cyan hover:text-cyan"
+                className="group flex min-w-0 items-center gap-3 rounded-md border border-border bg-surface px-4 py-3 font-mono text-xs text-foreground transition-colors hover:border-cyan hover:text-cyan sm:text-sm"
               >
-                <span className="size-1.5 rounded-full bg-cyan animate-pulse-dot" />
-                {e}
+                <span className="size-1.5 shrink-0 rounded-full bg-cyan animate-pulse-dot" />
+                <span className="break-all">{e}</span>
               </a>
             ))}
             <a

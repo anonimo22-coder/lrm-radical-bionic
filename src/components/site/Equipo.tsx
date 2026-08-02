@@ -354,7 +354,7 @@ export function Equipo() {
           </p>
         </div>
 
-        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+        <div className="mt-12 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3 xl:grid-cols-5">
           {TEAM.map((mem, i) => {
             const a = accent[mem.accent];
             return (
@@ -365,39 +365,39 @@ export function Equipo() {
                 aria-label={`Ver perfil de ${mem.short}`}
                 onClick={() => setOpenIdx(i)}
                 onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && (e.preventDefault(), setOpenIdx(i))}
-                className={`group panel card-sheen relative cursor-pointer p-5 transition-all duration-200 hover:-translate-y-1.5 focus:outline-none ${a.border}`}
+                className={`group panel card-sheen relative cursor-pointer p-3 transition-all duration-200 hover:-translate-y-1.5 focus:outline-none sm:p-5 ${a.border}`}
               >
                 {/* Top gradient bar on hover */}
                 <div className={`absolute inset-x-0 top-0 h-[2px] rounded-t-[inherit] bg-gradient-to-r ${a.bar} opacity-0 transition-opacity duration-200 group-hover:opacity-100`} />
 
                 {/* Avatar */}
-                <div className="relative mb-4 aspect-square overflow-hidden rounded-lg bg-navy">
+                <div className="relative mb-3 aspect-square overflow-hidden rounded-lg bg-navy sm:mb-4">
                   <div className="absolute inset-0 bg-grid opacity-30" />
                   <div className={`absolute inset-0 bg-gradient-to-br ${a.grad} opacity-0 transition-opacity duration-200 group-hover:opacity-100`} />
                   <div className="absolute inset-0 grid place-items-center">
-                    <span className="font-display text-5xl font-bold text-gradient transition-transform duration-200 group-hover:scale-105">
+                    <span className="font-display text-2xl font-bold text-gradient transition-transform duration-200 group-hover:scale-105 sm:text-5xl">
                       {mem.initials}
                     </span>
                   </div>
-                  <div className={`absolute left-2.5 top-2.5 flex items-center gap-1.5 rounded-full border px-2 py-0.5 font-mono text-[8px] uppercase tracking-[0.15em] backdrop-blur ${a.chip}`}>
+                  <div className={`absolute left-1.5 top-1.5 flex items-center gap-1 rounded-full border px-1.5 py-0.5 font-mono text-[7px] uppercase tracking-[0.1em] backdrop-blur sm:left-2.5 sm:top-2.5 sm:gap-1.5 sm:px-2 sm:text-[8px] sm:tracking-[0.15em] ${a.chip}`}>
                     <span className={`size-1 rounded-full ${a.dot} animate-pulse-dot`} />
-                    {mem.kicker}
+                    <span className="truncate">{mem.kicker}</span>
                   </div>
                   <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-cyan/40 to-transparent" />
                 </div>
 
                 {/* Info */}
-                <div className={`font-mono text-[9px] uppercase leading-relaxed tracking-widest ${a.text}`}>
+                <div className={`font-mono text-[8px] uppercase leading-relaxed tracking-wide sm:text-[9px] sm:tracking-widest ${a.text}`}>
                   {mem.role}
                 </div>
-                <div className="mt-1 font-display text-base font-semibold leading-snug">{mem.short}</div>
+                <div className="mt-1 font-display text-sm font-semibold leading-snug sm:text-base">{mem.short}</div>
 
                 {/* Badges */}
-                <div className="mt-2.5 flex flex-wrap gap-1">
+                <div className="mt-2 flex flex-wrap gap-1 sm:mt-2.5">
                   {mem.badges.map((b) => (
                     <span
                       key={b.label}
-                      className="inline-flex items-center gap-1 rounded-full border border-border bg-surface/70 px-1.5 py-0.5 text-[9px] text-muted-foreground"
+                      className="inline-flex items-center gap-1 rounded-full border border-border bg-surface/70 px-1.5 py-0.5 text-[8px] text-muted-foreground sm:text-[9px]"
                     >
                       <span aria-hidden>{b.icon}</span>
                       {b.label}
@@ -406,7 +406,7 @@ export function Equipo() {
                 </div>
 
                 {/* CTA */}
-                <div className={`mt-3.5 inline-flex items-center gap-1.5 text-[11px] font-semibold ${a.text}`}>
+                <div className={`mt-3 inline-flex items-center gap-1.5 text-[10px] font-semibold sm:mt-3.5 sm:text-[11px] ${a.text}`}>
                   Ver perfil
                   <span className="transition-transform duration-200 group-hover:translate-x-0.5">→</span>
                 </div>
