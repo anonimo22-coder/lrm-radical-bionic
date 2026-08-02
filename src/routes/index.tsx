@@ -643,58 +643,50 @@ const GLOSSARY = [
 ];
 
 function Glosario() {
-  const [open, setOpen] = useState<number | null>(0);
+  const [active, setActive] = useState<number>(0);
+  const g = GLOSSARY[active];
   return (
-    <section id="glosario" className="border-y border-border bg-surface/40 py-28">
-      <div className="mx-auto grid max-w-7xl gap-12 px-6 lg:grid-cols-[1fr_1.4fr]">
-        <div>
-          <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-cyan">
-            07 · Glosario
+    <section id="glosario" className="border-y border-border bg-surface/40 py-16">
+      <div className="mx-auto max-w-7xl px-6">
+        {/* Header row */}
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-cyan">
+              07 · Glosario
+            </div>
+            <h2 className="mt-2 text-3xl font-bold sm:text-4xl">
+              Palabras técnicas, <span className="text-gradient">explicadas simple.</span>
+            </h2>
           </div>
-          <h2 className="mt-4 text-4xl font-bold sm:text-5xl">
-            Palabras técnicas, <span className="text-gradient">explicadas simple.</span>
-          </h2>
-          <p className="mt-4 text-muted-foreground">
+          <p className="max-w-xs text-sm text-muted-foreground">
             Porque la tecnología solo tiene sentido si cualquier persona puede entenderla.
           </p>
         </div>
-        <div className="space-y-2">
-          {GLOSSARY.map((g, i) => {
-            const isOpen = open === i;
-            return (
-              <div
-                key={g.term}
-                className={`panel overflow-hidden transition-all ${
-                  isOpen ? "border-cyan" : ""
-                }`}
-              >
-                <button
-                  onClick={() => setOpen(isOpen ? null : i)}
-                  className="flex w-full items-center justify-between gap-4 p-5 text-left"
-                >
-                  <span className="font-display font-semibold">{g.term}</span>
-                  <span
-                    className={`grid size-7 shrink-0 place-items-center rounded-full border border-cyan/40 text-cyan transition-transform ${
-                      isOpen ? "rotate-45" : ""
-                    }`}
-                  >
-                    +
-                  </span>
-                </button>
-                <div
-                  className={`grid transition-all duration-500 ${
-                    isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
-                  }`}
-                >
-                  <div className="overflow-hidden">
-                    <p className="px-5 pb-5 text-sm leading-relaxed text-muted-foreground">
-                      {g.def}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+
+        {/* Term chips grid */}
+        <div className="mt-8 flex flex-wrap gap-2">
+          {GLOSSARY.map((item, i) => (
+            <button
+              key={item.term}
+              onClick={() => setActive(i)}
+              className={`rounded-full border px-4 py-1.5 font-mono text-[11px] uppercase tracking-[0.15em] transition-all duration-150 ${
+                active === i
+                  ? "border-cyan bg-cyan/10 text-cyan shadow-[0_0_16px_-4px_var(--cyan)]"
+                  : "border-border bg-surface/60 text-muted-foreground hover:border-cyan/40 hover:text-cyan/80"
+              }`}
+            >
+              {item.term}
+            </button>
+          ))}
+        </div>
+
+        {/* Definition panel */}
+        <div className="mt-4 flex min-h-[90px] items-start gap-4 rounded-xl border border-cyan/30 bg-cyan/5 px-6 py-5">
+          <span className="mt-0.5 size-2 shrink-0 rounded-full bg-cyan animate-pulse-dot" />
+          <div>
+            <p className="font-display text-sm font-semibold text-foreground">{g.term}</p>
+            <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{g.def}</p>
+          </div>
         </div>
       </div>
     </section>
