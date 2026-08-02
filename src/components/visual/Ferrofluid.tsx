@@ -1,186 +1,366 @@
-import { Renderer, Program, Mesh, Triangle, Color } from "ogl";
 import { useEffect, useRef } from "react";
+import { Renderer, Program, Mesh, Triangle } from "ogl";
 
-const VERT = `#version 300 es
-in vec2 position;
-void main() { gl_Position = vec4(position, 0.0, 1.0); }
+const MAX_COLORS = 8;
+
+const hexToRGB = (hex: string) => {
+  const c = hex.replace("#", "").padEnd(6, "0");
+  return [
+    parseInt(c.slice(0, 2), 16) / 255,
+    parseInt(c.slice(2, 4), 16) / 255,
+    parseInt(c.slice(4, 6), 16) / 255,
+  ];
+};
+
+const prepColors = (input?: string[]) => {
+  const base = (input && input.length ? input : ["#4F46E5", "#06B6D4", "#E0F2FE"]).slice(0, MAX_COLORS);
+  const count = base.length;
+  const arr: number[][] = [];
+  for (let i = 0; i < MAX_COLORS; i++) arr.push(hexToRGB(base[Math.min(i, base.length - 1)]));
+  const avg = [0, 0, 0];
+  for (let i = 0; i < count; i++) {
+    avg[0] += arr[i][0];
+    avg[1] += arr[i][1];
+    avg[2] += arr[i][2];
+  }
+  avg[0] /= count;
+  avg[1] /= count;
+  avg[2] /= count;
+  return { arr, count, avg };
+};
+
+const flowVec = (d: string) => {
+  switch (d) {
+    case "up":
+      return [0, 1];
+    case "down":
+      return [0, -1];
+    case "left":
+      return [-1, 0];
+    case "right":
+      return [1, 0];
+    default:
+      return [0, -1];
+  }
+};
+
+const vertex = `
+attribute vec2 position;
+attribute vec2 uv;
+varying vec2 vUv;
+void main() {
+  vUv = uv;
+  gl_Position = vec4(position, 0.0, 1.0);
+}
 `;
 
-/**
- * Ferrofluid — blob metálico de metaballs reactivo al cursor.
- * Render 100% GPU (ogl). Pausa el rAF fuera de pantalla y respeta
- * prefers-reduced-motion.
- */
-const FRAG = `#version 300 es
+const fragment = `
 precision highp float;
-uniform float uTime;
-uniform vec2 uResolution;
-uniform vec2 uMouse;
-uniform vec3 uColorA;
-uniform vec3 uColorB;
-uniform float uOpacity;
+uniform vec3  iResolution;
+uniform vec2  iMouse;
+uniform float iTime;
+uniform vec3  uColor0;
+uniform vec3  uColor1;
+uniform vec3  uColor2;
+uniform vec3  uColor3;
+uniform vec3  uColor4;
+uniform vec3  uColor5;
+uniform vec3  uColor6;
+uniform vec3  uColor7;
+uniform int   uColorCount;
+uniform vec3  uMouseColor;
+uniform vec2  uFlow;
+uniform float uSpeed;
 uniform float uScale;
-uniform float uBlobs;
-out vec4 fragColor;
+uniform float uTurbulence;
+uniform float uFluidity;
+uniform float uRimWidth;
+uniform float uSharpness;
+uniform float uShimmer;
+uniform float uGlow;
+uniform float uOpacity;
+uniform float uMouseEnabled;
+uniform float uMouseStrength;
+uniform float uMouseRadius;
+varying vec2 vUv;
 
-const float PI = 6.28318530718;
+#define PI 3.14159265
 
-float hash(float n) { return fract(sin(n) * 43758.5453123); }
+vec3 palette(float h) {
+  int count = uColorCount;
+  if (count < 1) count = 1;
+  int idx = int(floor(clamp(h, 0.0, 0.999999) * float(count)));
+  if (idx <= 0) return uColor0;
+  if (idx == 1) return uColor1;
+  if (idx == 2) return uColor2;
+  if (idx == 3) return uColor3;
+  if (idx == 4) return uColor4;
+  if (idx == 5) return uColor5;
+  if (idx == 6) return uColor6;
+  return uColor7;
+}
+
+float hash(vec3 p3) {
+  p3 = fract(p3 * 0.1031);
+  p3 += dot(p3, p3.zyx + 33.33);
+  return fract((p3.x + p3.y) * p3.z);
+}
+
+float smin(float a, float b, float k) {
+  float r = exp2(-a / k) + exp2(-b / k);
+  return -k * log2(r);
+}
+
+float sinlerp(float a, float b, float w) {
+  return mix(a, b, (sin(w * PI - PI / 2.0) + 1.0) / 2.0);
+}
+
+float vn(vec2 p, float s, float seed) {
+  vec2 cellp = floor(p / s);
+  vec2 relp = mod(p, s);
+  float g1 = hash(vec3(cellp, seed));
+  float g2 = hash(vec3(cellp.x + 1.0, cellp.y, seed));
+  float g3 = hash(vec3(cellp.x + 1.0, cellp.y + 1.0, seed));
+  float g4 = hash(vec3(cellp.x, cellp.y + 1.0, seed));
+  float bx = sinlerp(g1, g2, relp.x / s);
+  float tx = sinlerp(g4, g3, relp.x / s);
+  return sinlerp(bx, tx, relp.y / s);
+}
+
+float dbn(vec2 p, float s, float seed) {
+  float o = s / 2.0;
+  float n0 = vn(p, s, seed);
+  float n1 = vn(p + vec2(o, o), s, seed + 0.1);
+  float n2 = vn(p + vec2(-o, o), s, seed + 0.2);
+  float n3 = vn(p + vec2(o, -o), s, seed + 0.3);
+  float n4 = vn(p + vec2(-o, -o), s, seed + 0.4);
+  return (2.0 * n0 + 1.5 * n1 + 1.25 * n2 + 1.125 * n3 + n4) / 7.0;
+}
+
+void mainImage(out vec4 fragColor, in vec2 fragCoord) {
+  float ref = 700.0 / max(uScale, 0.05);
+  vec2 p = fragCoord / iResolution.y * ref;
+  float spd = 200.0 * uSpeed;
+  float t = iTime;
+  vec2 dir = uFlow;
+  vec2 perp = vec2(-dir.y, dir.x);
+  float distort1 = vn(p + perp * (t * spd), 60.0, 10.0) * 50.0 * uTurbulence;
+  float distort2 = vn(p - perp * (t * spd), 120.0, 15.0) * 100.0 * uTurbulence;
+  float peaks = dbn(p + distort1 + dir * (t * spd * 0.5), 40.0, 1.0);
+  float peaks2 = dbn(p + distort2 - dir * (t * spd * 0.5), 40.0, 0.0);
+  float mapeaks = smin(peaks, peaks2, max(uFluidity, 0.001));
+  float mGlow = 0.0;
+  if (uMouseEnabled > 0.5) {
+    vec2 mp = iMouse / iResolution.y * ref;
+    float md = length(p - mp) / ref;
+    float rr = max(uMouseRadius, 0.02);
+    mGlow = exp(-md * md / (rr * rr)) * uMouseStrength;
+  }
+  float band = (uRimWidth - abs((mapeaks - 0.4) * 2.0)) * 5.0;
+  float ltn = clamp(band - vn(p + dir * (t * spd * 0.5), 60.0, 12.0) * uShimmer, 0.0, 1.0);
+  ltn = pow(ltn, uSharpness) * uGlow;
+  ltn *= clamp(1.0 - mGlow, 0.0, 1.0);
+  float h = clamp(0.5 + (peaks - peaks2) * 0.8, 0.0, 1.0);
+  vec3 col = palette(h);
+  vec3 outc = col * ltn;
+  float a = clamp(max(outc.r, max(outc.g, outc.b)), 0.0, 1.0);
+  fragColor = vec4(outc, a * uOpacity);
+}
 
 void main() {
-  vec2 uv = (gl_FragCoord.xy - 0.5 * uResolution) / uResolution.y;
-  uv /= max(uScale, 0.0001);
-
-  vec2 m = (uMouse - 0.5 * uResolution) / uResolution.y;
-  m /= max(uScale, 0.0001);
-  m.y = -m.y;
-
-  float t = uTime * 0.45;
-  float field = 0.0;
-
-  // núcleo principal, atraído suavemente hacia el cursor
-  vec2 core = mix(vec2(0.0), m, 0.22);
-  field += 0.085 / (dot(uv - core, uv - core) + 0.0025);
-
-  // satélites orbitando: la "gota" ferrofluida
-  for (int i = 0; i < 9; i++) {
-    if (float(i) >= uBlobs) break;
-    float fi = float(i);
-    float seed = hash(fi + 1.0);
-    float ang = t * (0.35 + seed * 0.6) + fi * PI / uBlobs;
-    float rad = 0.22 + 0.18 * sin(t * (0.5 + seed) + fi);
-    vec2 p = core + vec2(cos(ang), sin(ang)) * rad;
-    p += (m - p) * 0.10 * seed;
-    float r = 0.016 + 0.020 * seed;
-    field += r / (dot(uv - p, uv - p) + 0.0022);
-  }
-
-  // púas magnéticas: modulación radial tipo ferrofluido
-  float a = atan(uv.y - core.y, uv.x - core.x);
-  field *= 1.0 + 0.10 * sin(a * 9.0 + t * 1.6);
-
-  float mask = smoothstep(0.85, 1.35, field);
-  float rim = smoothstep(0.75, 1.05, field) - smoothstep(1.05, 1.9, field);
-
-  vec3 col = mix(uColorA, uColorB, clamp(field * 0.35, 0.0, 1.0));
-  col += uColorB * rim * 0.9;
-
-  float halo = smoothstep(0.18, 0.95, field) * 0.35;
-  float alpha = clamp(mask + halo, 0.0, 1.0) * uOpacity;
-  fragColor = vec4(col * alpha, alpha);
+  vec4 color;
+  mainImage(color, vUv * iResolution.xy);
+  gl_FragColor = color;
 }
 `;
 
 type FerrofluidProps = {
-  colorA?: string;
-  colorB?: string;
-  blobs?: number;
-  scale?: number;
-  opacity?: number;
   className?: string;
+  dpr?: number;
+  paused?: boolean;
+  colors?: string[];
+  speed?: number;
+  scale?: number;
+  turbulence?: number;
+  fluidity?: number;
+  rimWidth?: number;
+  sharpness?: number;
+  shimmer?: number;
+  glow?: number;
+  flowDirection?: "up" | "down" | "left" | "right";
+  opacity?: number;
+  mouseInteraction?: boolean;
+  mouseStrength?: number;
+  mouseRadius?: number;
+  mouseDampening?: number;
+  mixBlendMode?: string;
 };
 
 export default function Ferrofluid({
-  colorA = "#0B4A6F",
-  colorB = "#67E8F9",
-  blobs = 7,
-  scale = 1.15,
-  opacity = 0.9,
-  className = "",
+  className,
+  dpr,
+  paused = false,
+  colors = ["#ffffff", "#ffffff", "#ffffff"],
+  speed = 0.5,
+  scale = 1.6,
+  turbulence = 1,
+  fluidity = 0.1,
+  rimWidth = 0.2,
+  sharpness = 2.5,
+  shimmer = 1.5,
+  glow = 2,
+  flowDirection = "down",
+  opacity = 1,
+  mouseInteraction = true,
+  mouseStrength = 1,
+  mouseRadius = 0.35,
+  mouseDampening = 0.15,
+  mixBlendMode,
 }: FerrofluidProps) {
-  const ctnDom = useRef<HTMLDivElement>(null);
-  const propsRef = useRef({ colorA, colorB, blobs, scale, opacity });
-  propsRef.current = { colorA, colorB, blobs, scale, opacity };
+  const containerRef = useRef<HTMLDivElement>(null);
+  const rafRef = useRef<number | null>(null);
+  const programRef = useRef<Program | null>(null);
+  const meshRef = useRef<Mesh | null>(null);
+  const geometryRef = useRef<Triangle | null>(null);
+  const rendererRef = useRef<Renderer | null>(null);
+  const mouseTargetRef = useRef<[number, number]>([0, 0]);
+  const lastTimeRef = useRef(0);
+  const colorsKey = colors.join(",");
 
   useEffect(() => {
-    const ctn = ctnDom.current;
-    if (!ctn) return;
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const container = containerRef.current;
+    if (!container) return;
 
-    const renderer = new Renderer({ alpha: true, premultipliedAlpha: true, antialias: true, dpr: Math.min(window.devicePixelRatio || 1, 2) });
-    const gl = renderer.gl;
-    gl.clearColor(0, 0, 0, 0);
-    gl.enable(gl.BLEND);
-    gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
-    gl.canvas.style.cssText = "display:block;width:100%;height:100%;background:transparent";
-
-    const geometry = new Triangle(gl);
-    if (geometry.attributes.uv) delete geometry.attributes.uv;
-
-    const p = propsRef.current;
-    const ca = new Color(p.colorA);
-    const cb = new Color(p.colorB);
-    const program = new Program(gl, {
-      vertex: VERT,
-      fragment: FRAG,
-      uniforms: {
-        uTime: { value: 0 },
-        uResolution: { value: [ctn.offsetWidth, ctn.offsetHeight] },
-        uMouse: { value: [ctn.offsetWidth / 2, ctn.offsetHeight / 2] },
-        uColorA: { value: [ca.r, ca.g, ca.b] },
-        uColorB: { value: [cb.r, cb.g, cb.b] },
-        uOpacity: { value: p.opacity },
-        uScale: { value: p.scale },
-        uBlobs: { value: p.blobs },
-      },
+    const renderer = new Renderer({
+      dpr: dpr ?? (typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1),
+      alpha: true,
+      antialias: true,
     });
+    rendererRef.current = renderer;
+    const gl = renderer.gl;
+    const canvas = gl.canvas;
+    gl.clearColor(0, 0, 0, 0);
+    canvas.style.width = "100%";
+    canvas.style.height = "100%";
+    canvas.style.display = "block";
+    container.appendChild(canvas);
+
+    const { arr, count, avg } = prepColors(colors);
+
+    const uniforms = {
+      iResolution: { value: [gl.drawingBufferWidth, gl.drawingBufferHeight, 1] },
+      iMouse: { value: [0, 0] },
+      iTime: { value: 0 },
+      uColor0: { value: arr[0] },
+      uColor1: { value: arr[1] },
+      uColor2: { value: arr[2] },
+      uColor3: { value: arr[3] },
+      uColor4: { value: arr[4] },
+      uColor5: { value: arr[5] },
+      uColor6: { value: arr[6] },
+      uColor7: { value: arr[7] },
+      uColorCount: { value: count },
+      uMouseColor: { value: avg },
+      uFlow: { value: flowVec(flowDirection) },
+      uSpeed: { value: speed },
+      uScale: { value: scale },
+      uTurbulence: { value: turbulence },
+      uFluidity: { value: fluidity },
+      uRimWidth: { value: rimWidth },
+      uSharpness: { value: sharpness },
+      uShimmer: { value: shimmer },
+      uGlow: { value: glow },
+      uOpacity: { value: opacity },
+      uMouseEnabled: { value: mouseInteraction ? 1 : 0 },
+      uMouseStrength: { value: mouseStrength },
+      uMouseRadius: { value: mouseRadius },
+    };
+
+    const program = new Program(gl, { vertex, fragment, uniforms });
+    programRef.current = program;
+    const geometry = new Triangle(gl);
+    geometryRef.current = geometry;
     const mesh = new Mesh(gl, { geometry, program });
-    ctn.appendChild(gl.canvas);
+    meshRef.current = mesh;
 
     const resize = () => {
-      renderer.setSize(ctn.offsetWidth, ctn.offsetHeight);
-      program.uniforms.uResolution.value = [
-        gl.canvas.width / renderer.dpr,
-        gl.canvas.height / renderer.dpr,
-      ];
+      const rect = container.getBoundingClientRect();
+      renderer.setSize(rect.width, rect.height);
+      uniforms.iResolution.value = [gl.drawingBufferWidth, gl.drawingBufferHeight, 1];
     };
-    window.addEventListener("resize", resize);
     resize();
+    const ro = new ResizeObserver(resize);
+    ro.observe(container);
 
-    const target = { x: ctn.offsetWidth / 2, y: ctn.offsetHeight / 2 };
-    const current = { x: target.x, y: target.y };
-    const onMove = (e: MouseEvent) => {
-      const rect = ctn.getBoundingClientRect();
-      target.x = e.clientX - rect.left;
-      target.y = e.clientY - rect.top;
+    const onPointerMove = (e: PointerEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      const sc = renderer.dpr || 1;
+      const x = (e.clientX - rect.left) * sc;
+      const y = (rect.height - (e.clientY - rect.top)) * sc;
+      mouseTargetRef.current = [x, y];
+      if (mouseDampening <= 0) uniforms.iMouse.value = [x, y];
     };
-    window.addEventListener("mousemove", onMove, { passive: true });
+    if (mouseInteraction) window.addEventListener("pointermove", onPointerMove, { passive: true });
 
-    let visible = true;
-    const io = new IntersectionObserver(([entry]) => {
-      visible = entry.isIntersecting;
-    });
-    io.observe(ctn);
-
-    let raf = 0;
-    const update = (t: number) => {
-      raf = requestAnimationFrame(update);
-      if (!visible) return;
-      const c = propsRef.current;
-      current.x += (target.x - current.x) * 0.06;
-      current.y += (target.y - current.y) * 0.06;
-      program.uniforms.uTime.value = reduce ? 0 : t * 0.001;
-      program.uniforms.uMouse.value = [current.x, current.y];
-      const a = new Color(c.colorA);
-      const b = new Color(c.colorB);
-      program.uniforms.uColorA.value = [a.r, a.g, a.b];
-      program.uniforms.uColorB.value = [b.r, b.g, b.b];
-      program.uniforms.uOpacity.value = c.opacity;
-      program.uniforms.uScale.value = c.scale;
-      program.uniforms.uBlobs.value = Math.min(Math.max(Math.round(c.blobs), 1), 9);
-      renderer.render({ scene: mesh });
+    const loop = (t: number) => {
+      rafRef.current = requestAnimationFrame(loop);
+      uniforms.iTime.value = t * 0.001;
+      if (mouseDampening > 0) {
+        if (!lastTimeRef.current) lastTimeRef.current = t;
+        const dt = (t - lastTimeRef.current) / 1000;
+        lastTimeRef.current = t;
+        const tau = Math.max(1e-4, mouseDampening);
+        let factor = 1 - Math.exp(-dt / tau);
+        if (factor > 1) factor = 1;
+        const target = mouseTargetRef.current;
+        const cur = uniforms.iMouse.value;
+        cur[0] += (target[0] - cur[0]) * factor;
+        cur[1] += (target[1] - cur[1]) * factor;
+      } else {
+        lastTimeRef.current = t;
+      }
+      if (!paused && programRef.current && meshRef.current) {
+        renderer.render({ scene: meshRef.current });
+      }
     };
-    raf = requestAnimationFrame(update);
+    rafRef.current = requestAnimationFrame(loop);
 
     return () => {
-      cancelAnimationFrame(raf);
-      io.disconnect();
-      window.removeEventListener("resize", resize);
-      window.removeEventListener("mousemove", onMove);
-      if (gl.canvas.parentNode === ctn) ctn.removeChild(gl.canvas);
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      if (mouseInteraction) window.removeEventListener("pointermove", onPointerMove);
+      ro.disconnect();
+      if (canvas.parentElement === container) container.removeChild(canvas);
       gl.getExtension("WEBGL_lose_context")?.loseContext();
+      programRef.current = null;
+      geometryRef.current = null;
+      meshRef.current = null;
+      rendererRef.current = null;
     };
-  }, []);
+  }, [
+    dpr,
+    paused,
+    colorsKey,
+    speed,
+    scale,
+    turbulence,
+    fluidity,
+    rimWidth,
+    sharpness,
+    shimmer,
+    glow,
+    flowDirection,
+    opacity,
+    mouseInteraction,
+    mouseStrength,
+    mouseRadius,
+    mouseDampening,
+  ]);
 
-  return <div ref={ctnDom} className={`relative size-full ${className}`} />;
+  return (
+    <div
+      ref={containerRef}
+      className={`relative size-full overflow-hidden ${className ?? ""}`}
+      style={mixBlendMode ? { mixBlendMode: mixBlendMode as never } : undefined}
+    />
+  );
 }
