@@ -12,7 +12,7 @@ import { PlanosCad } from "@/components/site/PlanosCad";
 import { Relacion, CanvasMaqueta, Asesores } from "@/components/site/SenaExtras";
 import { CursorFX } from "@/components/visual/CursorFX";
 import { useMagnetic } from "@/components/visual/Reveal";
-import Strands from "@/components/visual/Strands";
+import Ferrofluid from "@/components/visual/Ferrofluid";
 
 
 
