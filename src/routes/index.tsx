@@ -109,9 +109,9 @@ function Hero() {
   const magnetSecondary = useMagnetic<HTMLAnchorElement>(8);
   return (
     <section id="top" className="relative overflow-hidden bg-hero">
-      {/* Ferrofluid / Strands — hilos de luz en movimiento */}
-      <div className="pointer-events-none absolute inset-0 opacity-70">
-        <Strands colors={["#06B6D4", "#3B82F6", "#A5F3FC"]} count={4} speed={0.3} />
+      {/* Ferrofluid — gota magnética reactiva al cursor (WebGL / ogl) */}
+      <div className="pointer-events-none absolute inset-0 opacity-80">
+        <Ferrofluid colorA="#0B4A6F" colorB="#67E8F9" blobs={7} scale={1.15} opacity={0.9} />
       </div>
       <div className="absolute inset-0 bg-grid opacity-30" />
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan/60 to-transparent" />
