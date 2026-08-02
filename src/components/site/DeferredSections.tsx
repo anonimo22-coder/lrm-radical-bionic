@@ -3,7 +3,6 @@ import { Relacion, CanvasMaqueta, Asesores } from "./SenaExtras";
 import { Equipo } from "./Equipo";
 import { Blog } from "./Blog";
 import { Galeria } from "./Galeria";
-import { PlanosCad } from "./PlanosCad";
 
 export function DeferredRelacion() {
   return <DeferredSection><Relacion /></DeferredSection>;
@@ -22,7 +21,4 @@ export function DeferredBlog() {
 }
 export function DeferredGaleria() {
   return <DeferredSection><Galeria /></DeferredSection>;
-}
-export function DeferredPlanosCad() {
-  return <DeferredSection><PlanosCad /></DeferredSection>;
 }

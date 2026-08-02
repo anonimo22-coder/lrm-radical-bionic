@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-type Accent = "cyan" | "eco" | "ai" | "volt" | "alert";
+type Accent = "cyan" | "eco" | "volt";
 
 type Member = {
   name: string;
@@ -35,15 +35,6 @@ const accent = {
     chip: "border-eco/30 bg-eco/10 text-eco",
     bar: "from-eco to-cyan",
   },
-  ai: {
-    text: "text-ai",
-    border: "hover:border-ai",
-    ring: "group-hover:ring-glow-ai",
-    grad: "from-ai/25 via-transparent to-transparent",
-    dot: "bg-ai",
-    chip: "border-ai/30 bg-ai/10 text-ai",
-    bar: "from-ai to-volt",
-  },
   volt: {
     text: "text-volt",
     border: "hover:border-volt",
@@ -52,15 +43,6 @@ const accent = {
     dot: "bg-volt",
     chip: "border-volt/30 bg-volt/10 text-volt",
     bar: "from-volt to-cyan",
-  },
-  alert: {
-    text: "text-alert",
-    border: "hover:border-alert",
-    ring: "group-hover:ring-glow-alert",
-    grad: "from-alert/25 via-transparent to-transparent",
-    dot: "bg-alert",
-    chip: "border-alert/30 bg-alert/10 text-alert",
-    bar: "from-alert to-solar",
   },
 } satisfies Record<Accent, Record<string, string>>;
 
@@ -138,7 +120,7 @@ export const TEAM: Member[] = [
     role: "Ingeniería · Dirección tecnológica",
     kicker: "Estratega",
     initials: "JL",
-    accent: "ai",
+    accent: "volt",
     headline: "Integra investigación, diseño y producción en una sola arquitectura de procesos.",
     bio: "Es la columna vertebral operativa y metodológica de LRM Robotics. Analiza los flujos internos, detecta fallas y diseña estructuras lógicas que transforman el caos en sistemas organizados. Se mueve con naturalidad en entornos digitales y usa la tecnología como herramienta para planificar y supervisar el proyecto completo. Su sentido del deber y su disciplina son la garantía de que cada entregable cumpla su propósito.",
     strengths: [
@@ -161,7 +143,7 @@ export const TEAM: Member[] = [
     role: "Usuario colaborador · Participante del proceso investigativo",
     kicker: "La voz del usuario",
     initials: "DV",
-    accent: "alert",
+    accent: "eco",
     headline: "Aporta la experiencia real que valida cada decisión de diseño de la prótesis.",
     bio: "Su participación en el proceso investigativo convierte la teoría en criterio. A través de una entrevista semiestructurada, Danna compartió su experiencia cotidiana con una discapacidad física congénita en extremidad superior y señaló con claridad qué debe priorizar una prótesis para ser realmente útil: comodidad, facilidad de uso y mantenimiento sencillo. También expuso las barreras económicas y de desplazamiento que impiden el acceso, y valoró positivamente el uso de materiales reciclables siempre que su funcionamiento y durabilidad estén verificados.",
     strengths: [

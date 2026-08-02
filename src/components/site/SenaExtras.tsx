@@ -11,8 +11,13 @@ export function Relacion() {
       accentText: "text-eco",
       chip: "border-eco/30 bg-eco/10 text-eco",
       bar: "from-eco to-cyan",
-      desc: "Semillero investigativo de la Institución Educativa Soacha Para Vivir Mejor. Es el espacio científico donde nace y se sostiene LRM Robotics: allí se formula el problema de investigación, se construye la metodología, se estudian los parámetros biomecánicos y se valida el diseño con usuarios reales.",
-      bullets: ["Pregunta y objetivos de investigación", "Metodología y rigor científico", "Modelado CAD y validación con usuario"],
+      glow: "hover:shadow-[0_20px_60px_-20px_var(--eco)]",
+      desc: "Semillero investigativo de la Institución Educativa Soacha Para Vivir Mejor. Aquí nace el rigor científico de LRM Robotics: formulación del problema, metodología biomecánica y validación con usuarios reales.",
+      bullets: [
+        "Pregunta y objetivos de investigación",
+        "Metodología y rigor científico",
+        "Modelado CAD y validación con usuario",
+      ],
     },
     {
       tag: "Proceso de formación",
@@ -20,8 +25,13 @@ export function Relacion() {
       accentText: "text-volt",
       chip: "border-volt/30 bg-volt/10 text-volt",
       bar: "from-volt to-ai",
-      desc: "Es el proceso de formación empresarial que le da estructura organizacional al proyecto. Allí se desarrolla el modelo de negocio, la documentación administrativa y la simulación de los procesos de una empresa real.",
-      bullets: ["Modelo de negocio y Canvas", "Estructura administrativa y documental", "Simulación académica de RR.HH."],
+      glow: "hover:shadow-[0_20px_60px_-20px_var(--volt)]",
+      desc: "Formación empresarial que construye la estructura organizacional del proyecto: modelo de negocio, documentación administrativa y simulación real de procesos corporativos.",
+      bullets: [
+        "Modelo de negocio y Canvas",
+        "Estructura administrativa y documental",
+        "Simulación académica de RR.HH.",
+      ],
     },
   ];
 
@@ -37,42 +47,41 @@ export function Relacion() {
             Dos procesos, <span className="text-gradient">un mismo proyecto.</span>
           </h2>
           <p className="mt-4 text-muted-foreground">
-            LRM Robotics avanza sobre dos vías complementarias y con el mismo peso: la investigación
-            científica del semillero HeroBots —de la Institución Educativa Soacha Para Vivir Mejor— y
-            la formación empresarial del SENA. HeroBots no pertenece al SENA: son procesos distintos
-            que se articulan en un solo proyecto.
+            LRM Robotics avanza por dos vías independientes y complementarias.
+            HeroBots y el SENA no son lo mismo — pero construyen lo mismo.
           </p>
-
-
         </div>
 
-        <div className="mt-12 grid items-stretch gap-6 lg:grid-cols-[1fr_auto_1fr]">
-          {cards.map((c, i) => (
-            <div key={c.title} className={i === 1 ? "order-3 lg:order-none" : ""}>
-              <article className="panel card-sheen relative h-full overflow-hidden p-7 transition-transform duration-500 hover:-translate-y-1">
-                <div className={`absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r ${c.bar}`} />
-                <span className={`inline-block rounded-full border px-2.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.2em] ${c.chip}`}>
-                  {c.tag}
-                </span>
-                <h3 className={`mt-4 font-display text-2xl font-bold ${c.accentText}`}>{c.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{c.desc}</p>
-                <ul className="mt-5 space-y-2">
-                  {c.bullets.map((b) => (
-                    <li key={b} className="flex items-start gap-2 text-sm text-foreground/85">
-                      <span className={`mt-1.5 size-1.5 shrink-0 rounded-full bg-gradient-to-r ${c.bar}`} />
-                      {b}
-                    </li>
-                  ))}
-                </ul>
-              </article>
-            </div>
+        <div className="mt-12 grid gap-6 sm:grid-cols-2">
+          {cards.map((c) => (
+            <article
+              key={c.title}
+              className={`panel card-sheen relative overflow-hidden p-7 transition-all duration-500 hover:-translate-y-1 ${c.glow}`}
+            >
+              <div className={`absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r ${c.bar}`} />
+              <span className={`inline-block rounded-full border px-2.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.2em] ${c.chip}`}>
+                {c.tag}
+              </span>
+              <h3 className={`mt-4 font-display text-3xl font-bold ${c.accentText}`}>{c.title}</h3>
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{c.desc}</p>
+              <div className="mt-5 space-y-2">
+                {c.bullets.map((b) => (
+                  <div key={b} className="flex items-center gap-3 rounded-md border border-border/60 bg-surface/50 px-4 py-2.5">
+                    <span className={`size-1.5 shrink-0 rounded-full bg-gradient-to-br ${c.bar}`} />
+                    <span className="text-sm font-medium">{b}</span>
+                  </div>
+                ))}
+              </div>
+            </article>
           ))}
-          <div className="order-2 hidden items-center justify-center lg:flex">
-            <div className="relative grid size-14 place-items-center rounded-full border border-border bg-surface">
-              <span className="absolute inset-0 rounded-full bg-cyan/20 blur-xl" />
-              <span className="relative font-display text-lg font-bold text-gradient">+</span>
-            </div>
-          </div>
+        </div>
+
+        <div className="mt-8 flex items-center justify-center gap-4 font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground/60">
+          <span className="h-px w-24 bg-gradient-to-r from-transparent to-border" />
+          <span className="size-1.5 rounded-full bg-cyan animate-pulse-dot" />
+          <span>Procesos distintos · Proyecto unificado</span>
+          <span className="size-1.5 rounded-full bg-cyan animate-pulse-dot" />
+          <span className="h-px w-24 bg-gradient-to-l from-transparent to-border" />
         </div>
       </div>
     </section>

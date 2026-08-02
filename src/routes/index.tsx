@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Suspense, useEffect, useState, lazy } from "react";
+import { useEffect, useState } from "react";
 import logoDark from "@/assets/logo-dark.png.asset.json";
 import logoLight from "@/assets/logo-light.png.asset.json";
 import lrmLogo from "@/assets/lrm-logo.png.asset.json";
@@ -14,10 +14,8 @@ import {
   DeferredEquipo,
   DeferredBlog,
   DeferredGaleria,
-  DeferredPlanosCad,
 } from "@/components/site/DeferredSections";
-
-const Ferrofluid = lazy(() => import("@/components/visual/Ferrofluid"));
+import DotField from "@/components/visual/DotField";
 
 
 
@@ -114,26 +112,8 @@ function Hero() {
   const magnetSecondary = useMagnetic<HTMLAnchorElement>(8);
   return (
     <section id="top" className="relative overflow-hidden bg-hero">
-      {/* Ferrofluid — superficie magnética reactiva al cursor (WebGL / ogl) */}
-      <div className="pointer-events-none absolute inset-0">
-        <Suspense fallback={null}>
-        <Ferrofluid
-          colors={["#ffffff", "#0061ff", "#ffffff"]}
-          speed={0.5}
-          scale={1}
-          turbulence={1}
-          fluidity={0.1}
-          rimWidth={0.2}
-          sharpness={3}
-          shimmer={1}
-          glow={2}
-          flowDirection="down"
-          opacity={1}
-          mouseInteraction
-          mouseStrength={1}
-          mouseRadius={0.3}
-        />
-        </Suspense>
+      <div className="pointer-events-none absolute inset-0 opacity-60">
+        <DotField dotSpacing={22} dotRadius={1.4} bulgeStrength={38} />
       </div>
       <div className="absolute inset-0 bg-grid opacity-30" />
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan/60 to-transparent" />
@@ -153,10 +133,7 @@ function Hero() {
           </h1>
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
             Investigamos y desarrollamos prótesis biónicas de brazo{" "}
-            <span className="text-foreground">basadas en economía circular, modelado CAD e IA adaptativa</span>,
-            desde <span className="text-foreground">HeroBots</span>, el semillero investigativo de la
-            Institución Educativa Soacha Para Vivir Mejor, en Soacha, Cundinamarca. Nuestro proceso de
-            formación empresarial se desarrolla con el <span className="text-foreground">SENA</span>.
+            <span className="text-foreground">basadas en economía circular, modelado CAD e IA adaptativa</span>.
           </p>
 
           <div className="mt-10 flex flex-wrap gap-3">
@@ -179,7 +156,10 @@ function Hero() {
             </a>
 
           </div>
-          <div className="mt-12 flex gap-8 border-t border-border pt-6 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+          <p className="mt-6 max-w-lg text-xs leading-relaxed text-muted-foreground/60">
+            Desarrollado por el Semillero de Investigación <span className="text-muted-foreground/90">HeroBots</span> de la Institución Educativa Soacha Para Vivir Mejor, y el proceso de formación empresarial del <span className="text-muted-foreground/90">SENA</span>.
+          </p>
+          <div className="mt-8 flex gap-8 border-t border-border pt-6 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
             <div>
               <div className="text-cyan">▸ &lt; 300 ms</div>
               <div className="mt-1">Latencia EMG objetivo</div>
@@ -291,7 +271,7 @@ function Tecnologia() {
     {
       n: "03",
       title: "IA Adaptativa",
-      desc: "Control por señales mioeléctricas (EMG) con latencia objetivo menor a 300 ms. Aprende del usuario.",
+      desc: "Control por señales mioeléctricas (EMG). La prótesis aprende del usuario.",
       analogy:
         "Escuchamos el «lenguaje eléctrico» que tus músculos ya usan para moverse; la IA lo traduce en movimiento real, más preciso con cada uso.",
       icon: (
@@ -349,6 +329,7 @@ function Tecnologia() {
 
 /* --------------------------- investigación ------------------------------- */
 function Investigacion() {
+  const [expanded, setExpanded] = useState(false);
   const objectives = [
     {
       title: "Fundamentar el diseño con base en usuarios reales",
@@ -448,46 +429,67 @@ function Investigacion() {
               </p>
             </div>
 
-            {/* Objetivos específicos */}
+            {/* Toggle Ver más info */}
             <div>
-              <div className="mb-4 font-mono text-[10px] uppercase tracking-[0.3em] text-cyan">
-                Objetivos específicos
-              </div>
-              <div className="grid gap-3 sm:grid-cols-2">
-                {objectives.map((o, i) => (
-                  <div
-                    key={i}
-                    className="group panel p-5 transition-all hover:-translate-y-1 hover:border-cyan"
-                  >
-                    <div className="font-mono text-[10px] text-cyan">
-                      0{i + 1}
-                    </div>
-                    <div className="mt-2 font-display text-sm font-semibold leading-snug">
-                      {o.title}
-                    </div>
-                    <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-                      {o.desc}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
+              <button
+                onClick={() => setExpanded((v) => !v)}
+                className="group flex items-center gap-2 rounded-md border border-border/60 bg-surface/50 px-4 py-2.5 font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground transition-all hover:border-cyan/50 hover:text-cyan"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  className={`size-3.5 shrink-0 transition-transform duration-300 ${expanded ? "rotate-180" : ""}`}
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                {expanded ? "Ocultar información" : "Ver más información"}
+              </button>
 
-            {/* Hipótesis */}
-            <div className="panel relative overflow-hidden p-6">
-              <div className="absolute inset-0 bg-gradient-to-br from-cyan/10 via-transparent to-transparent" />
-              <div className="relative">
-                <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-cyan">
-                  ▸ Hipótesis
+              {expanded && (
+                <div className="mt-5 space-y-5">
+                  {/* Objetivos específicos */}
+                  <div>
+                    <div className="mb-4 font-mono text-[10px] uppercase tracking-[0.3em] text-cyan">
+                      Objetivos específicos
+                    </div>
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      {objectives.map((o, i) => (
+                        <div
+                          key={i}
+                          className="group panel p-5 transition-all hover:-translate-y-1 hover:border-cyan"
+                        >
+                          <div className="font-mono text-[10px] text-cyan">0{i + 1}</div>
+                          <div className="mt-2 font-display text-sm font-semibold leading-snug">
+                            {o.title}
+                          </div>
+                          <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                            {o.desc}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Hipótesis */}
+                  <div className="panel relative overflow-hidden p-6">
+                    <div className="absolute inset-0 bg-gradient-to-br from-cyan/10 via-transparent to-transparent" />
+                    <div className="relative">
+                      <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-cyan">
+                        ▸ Hipótesis
+                      </div>
+                      <p className="mt-3 text-sm leading-relaxed text-foreground/90">
+                        El desarrollo de una prótesis fabricada con materiales reciclados, IA adaptativa
+                        y energía híbrida puede ofrecer un desempeño funcional{" "}
+                        <span className="text-cyan">comparable al de dispositivos comerciales
+                        importados</span>, reduciendo significativamente los costos y las barreras de
+                        acceso para las personas con amputación de miembro superior en Colombia.
+                      </p>
+                    </div>
+                  </div>
                 </div>
-                <p className="mt-3 text-sm leading-relaxed text-foreground/90">
-                  El desarrollo de una prótesis fabricada con materiales reciclados, IA adaptativa
-                  y energía híbrida puede ofrecer un desempeño funcional{" "}
-                  <span className="text-cyan">comparable al de dispositivos comerciales
-                  importados</span>, reduciendo significativamente los costos y las barreras de
-                  acceso para las personas con amputación de miembro superior en Colombia.
-                </p>
-              </div>
+              )}
             </div>
           </div>
         </div>
@@ -497,22 +499,7 @@ function Investigacion() {
 }
 
 /* ----------------------------- SENA / HR flow ---------------------------- */
-const STEPS = [
-  "Requisición y perfilamiento",
-  "Publicación y recepción de HV",
-  "Preselección y filtrado",
-  "Pruebas y entrevistas",
-  "Verificación de antecedentes",
-  "Selección final y oferta",
-  "Exámenes médicos de ingreso",
-  "Firma del contrato",
-  "Afiliaciones a seguridad social",
-  "Conformación de hoja de vida",
-  "Incorporación a nómina y bienestar",
-];
-
 function Sena() {
-  const [active, setActive] = useState(0);
   const timeline = [
     {
       year: "2025",
@@ -534,15 +521,6 @@ function Sena() {
       label: "Escalamiento",
       desc: "Expansión tecnológica, fortalecimiento de la investigación y nuevas líneas de innovación.",
     },
-  ];
-  const docs = [
-    "Perfiles de cargo",
-    "Manuales",
-    "Procesos",
-    "Formatos",
-    "Diagramas",
-    "Políticas",
-    "Documentos administrativos",
   ];
   return (
     <section id="sena" className="py-28">
@@ -573,83 +551,31 @@ function Sena() {
           </div>
         </div>
 
-        {/* HR flow */}
-        <div className="mt-16 panel p-6 sm:p-8">
-          <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <h3 className="font-display text-xl font-semibold">
-                Simulación del proceso de selección y vinculación
-              </h3>
-              <p className="mt-1 text-xs text-muted-foreground">
-                Ejercicio académico desarrollado dentro del SENA como evidencia del proceso de
-                Recursos Humanos. No corresponde a una convocatoria ni a un proceso real de
-                contratación.
-              </p>
-            </div>
-            <span className="font-mono text-[10px] uppercase tracking-widest text-cyan">
-              11 etapas · RR.HH.
-            </span>
-          </div>
-          <div className="relative overflow-x-auto pb-4">
-            <div className="flex min-w-max items-stretch gap-3">
-              {STEPS.map((s, i) => (
-                <button
-                  key={i}
-                  onMouseEnter={() => setActive(i)}
-                  onFocus={() => setActive(i)}
-                  className={`group relative w-56 shrink-0 rounded-lg border p-4 text-left transition-all ${
-                    active === i
-                      ? "border-cyan bg-cyan/10 shadow-[0_10px_30px_-10px_var(--cyan)]"
-                      : "border-border bg-surface hover:border-cyan/40"
-                  }`}
-                >
-                  <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-cyan">
-                    <span>{String(i + 1).padStart(2, "0")}</span>
-                    <span className="h-px flex-1 bg-cyan/30" />
-                  </div>
-                  <div className="mt-3 text-sm font-semibold leading-snug">{s}</div>
-                  {i < STEPS.length - 1 && (
-                    <span className="absolute -right-2.5 top-1/2 hidden -translate-y-1/2 text-cyan sm:block">
-                      →
-                    </span>
-                  )}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-
         {/* Documentación */}
         <div className="mt-10 panel p-6 sm:p-8">
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-cyan">
-                ▸ Documentación
-              </div>
-              <h3 className="mt-2 font-display text-xl font-semibold">
-                Repositorio documental del proceso
-              </h3>
-              <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
-                Espacio preparado para incorporar posteriormente los documentos desarrollados
-                durante nuestro proceso de Recursos Humanos y de estructuración empresarial.
-              </p>
-            </div>
-            <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-              Próximamente
-            </span>
+          <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-cyan">
+            ▸ Documentación
           </div>
-          <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {docs.map((d) => (
-              <div
-                key={d}
-                className="flex items-center justify-between rounded-md border border-dashed border-border bg-surface/40 px-4 py-3 text-sm text-muted-foreground transition-colors hover:border-cyan/40"
-              >
-                <span>{d}</span>
-                <span className="font-mono text-[9px] uppercase tracking-widest text-cyan/70">
-                  —
-                </span>
-              </div>
-            ))}
+          <h3 className="mt-2 font-display text-xl font-semibold">
+            Repositorio documental del proceso
+          </h3>
+          <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
+            Todos los documentos desarrollados durante nuestro proceso de Recursos Humanos
+            y de estructuración empresarial están disponibles en Google Drive.
+          </p>
+          <div className="mt-6">
+            <a
+              href="https://drive.google.com/drive/folders/1s8A9b6PzXpExofdH-OH9bhgT9q3FosW6"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground shadow-[0_10px_40px_-10px_var(--cyan)] transition-shadow hover:shadow-[0_16px_50px_-8px_var(--cyan)]"
+            >
+              <svg viewBox="0 0 24 24" className="size-4" fill="currentColor">
+                <path d="M6.28 3h11.44l4.28 7-2.14 3.5H4.14L2 10zm-.4 8.5L2 18h20l-3.88-6.5zM12 13l-2-3.5h4z" opacity=".3" />
+                <path d="M11.34 2H6.28L2 9l2.14 3.5h15.72L24 9 19.72 2h-5.06l2.86 5h-11l2.86-5zM4.14 12.5 2 16l.01.01L6 22h12l4-5.99L19.86 14l-3.72 6.5H7.86L4.14 12.5z" />
+              </svg>
+              Ver documentación en Drive
+            </a>
           </div>
         </div>
 
@@ -931,7 +857,6 @@ function Index() {
         <DeferredEquipo />
         <DeferredBlog />
         <DeferredGaleria />
-        <DeferredPlanosCad />
         <Glosario />
         <Contacto />
       </main>
