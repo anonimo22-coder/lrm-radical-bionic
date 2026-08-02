@@ -122,7 +122,7 @@ function Hero() {
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-cyan/30 bg-cyan/5 px-3 py-1">
             <span className="size-1.5 rounded-full bg-cyan animate-pulse-dot" />
             <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-cyan">
-              Biónica radical · Soacha · Colombia
+              Tecnología con Propósito
             </span>
           </div>
           <h1 className="font-display text-5xl font-bold leading-[0.95] tracking-tight sm:text-6xl lg:text-7xl">
