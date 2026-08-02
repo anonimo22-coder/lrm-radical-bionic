@@ -235,16 +235,18 @@
 @utility aurora {
   position: relative;
   isolation: isolate;
+  contain: layout style;
   &::before {
     content: "";
     position: absolute;
-    inset: -40%;
+    inset: -20%;
     z-index: -1;
     background:
       radial-gradient(40% 40% at 20% 30%, color-mix(in oklab, var(--eco) 22%, transparent), transparent 70%),
       radial-gradient(40% 40% at 80% 20%, color-mix(in oklab, var(--ai) 22%, transparent), transparent 70%),
       radial-gradient(45% 45% at 55% 85%, color-mix(in oklab, var(--volt) 22%, transparent), transparent 70%);
-    filter: blur(60px);
+    filter: blur(40px);
+    will-change: transform;
     animation: aurora-drift 18s ease-in-out infinite alternate;
   }
 }

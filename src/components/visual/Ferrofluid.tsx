@@ -231,10 +231,14 @@ export default function Ferrofluid({
     const container = containerRef.current;
     if (!container) return;
 
+    let visible = true;
+    const io = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; });
+    io.observe(container);
+
     const renderer = new Renderer({
-      dpr: dpr ?? (typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1),
+      dpr: dpr ?? Math.min(typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1, 1.5),
       alpha: true,
-      antialias: true,
+      antialias: false,
     });
     rendererRef.current = renderer;
     const gl = renderer.gl;
@@ -319,7 +323,7 @@ export default function Ferrofluid({
       } else {
         lastTimeRef.current = t;
       }
-      if (!paused && programRef.current && meshRef.current) {
+      if (!paused && visible && programRef.current && meshRef.current) {
         renderer.render({ scene: meshRef.current });
       }
     };
@@ -328,6 +332,7 @@ export default function Ferrofluid({
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
       if (mouseInteraction) window.removeEventListener("pointermove", onPointerMove);
+      io.disconnect();
       ro.disconnect();
       if (canvas.parentElement === container) container.removeChild(canvas);
       gl.getExtension("WEBGL_lose_context")?.loseContext();

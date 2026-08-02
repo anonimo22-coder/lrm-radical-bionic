@@ -1,18 +1,23 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState, lazy } from "react";
 import logoDark from "@/assets/logo-dark.png.asset.json";
 import logoLight from "@/assets/logo-light.png.asset.json";
 import lrmLogo from "@/assets/lrm-logo.png.asset.json";
 import heroArm from "@/assets/hero-arm.jpg.asset.json";
 import { MegaNav } from "@/components/site/MegaNav";
-import { Equipo } from "@/components/site/Equipo";
-import { Blog } from "@/components/site/Blog";
-import { Galeria } from "@/components/site/Galeria";
-import { PlanosCad } from "@/components/site/PlanosCad";
-import { Relacion, CanvasMaqueta, Asesores } from "@/components/site/SenaExtras";
 import { CursorFX } from "@/components/visual/CursorFX";
 import { useMagnetic } from "@/components/visual/Reveal";
-import Ferrofluid from "@/components/visual/Ferrofluid";
+import {
+  DeferredRelacion,
+  DeferredCanvasMaqueta,
+  DeferredAsesores,
+  DeferredEquipo,
+  DeferredBlog,
+  DeferredGaleria,
+  DeferredPlanosCad,
+} from "@/components/site/DeferredSections";
+
+const Ferrofluid = lazy(() => import("@/components/visual/Ferrofluid"));
 
 
 
@@ -80,7 +85,7 @@ function IntroSplash({ onDone }: { onDone: () => void }) {
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan to-transparent animate-scan" />
       <div className="relative flex flex-col items-center gap-6">
         <div className="relative size-40 sm:size-48">
-          <div className="absolute inset-0 rounded-full bg-cyan/25 blur-3xl animate-pulse-dot" />
+          <div className="absolute inset-0 rounded-full bg-cyan/25 blur-2xl animate-pulse-dot" />
           <img
             src={lrmLogo.url}
             alt="LRM Robotics"
@@ -111,6 +116,7 @@ function Hero() {
     <section id="top" className="relative overflow-hidden bg-hero">
       {/* Ferrofluid — superficie magnética reactiva al cursor (WebGL / ogl) */}
       <div className="pointer-events-none absolute inset-0">
+        <Suspense fallback={null}>
         <Ferrofluid
           colors={["#ffffff", "#0061ff", "#ffffff"]}
           speed={0.5}
@@ -127,6 +133,7 @@ function Hero() {
           mouseStrength={1}
           mouseRadius={0.3}
         />
+        </Suspense>
       </div>
       <div className="absolute inset-0 bg-grid opacity-30" />
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan/60 to-transparent" />
@@ -191,8 +198,8 @@ function Hero() {
         {/* Logo protagonista — sin fondo, animación premium */}
         <div className="relative grid place-items-center">
           <div className="pointer-events-none absolute inset-0 -z-10">
-            <div className="absolute left-1/2 top-1/2 size-[110%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan/25 blur-[120px] animate-pulse-dot" />
-            <div className="absolute left-1/2 top-1/2 size-[70%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/20 blur-[80px]" />
+            <div className="absolute left-1/2 top-1/2 size-[110%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan/25 blur-[60px] animate-pulse-dot" />
+            <div className="absolute left-1/2 top-1/2 size-[70%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/20 blur-[40px]" />
           </div>
           <img
             src={lrmLogo.url}
@@ -917,14 +924,14 @@ function Index() {
         <Problema />
         <Tecnologia />
         <Investigacion />
-        <Relacion />
+        <DeferredRelacion />
         <Sena />
-        <CanvasMaqueta />
-        <Asesores />
-        <Equipo />
-        <Blog />
-        <Galeria />
-        <PlanosCad />
+        <DeferredCanvasMaqueta />
+        <DeferredAsesores />
+        <DeferredEquipo />
+        <DeferredBlog />
+        <DeferredGaleria />
+        <DeferredPlanosCad />
         <Glosario />
         <Contacto />
       </main>

@@ -23,22 +23,28 @@ export function CursorFX() {
     let targetScale = 1;
     let opacity = 0;
     let raf = 0;
+    let idle = 0;
+
+    const startLoop = () => { if (!raf) raf = requestAnimationFrame(loop); };
 
     const onMove = (e: MouseEvent) => {
       mx = e.clientX;
       my = e.clientY;
       opacity = 1;
+      idle = 0;
       const hit = (e.target as HTMLElement | null)?.closest(
         "a, button, [role='button'], input, textarea, summary, [data-cursor='hover']",
       );
       targetScale = hit ? 1.9 : 1;
+      startLoop();
     };
     const onLeave = () => {
       opacity = 0;
+      startLoop();
     };
 
     const loop = () => {
-      raf = requestAnimationFrame(loop);
+      raf = 0;
       rx += (mx - rx) * 0.16;
       ry += (my - ry) * 0.16;
       scale += (targetScale - scale) * 0.12;
@@ -50,15 +56,18 @@ export function CursorFX() {
         ringRef.current.style.transform = `translate3d(${rx}px, ${ry}px, 0) translate(-50%, -50%) scale(${scale.toFixed(3)})`;
         ringRef.current.style.opacity = String(opacity * (targetScale > 1.2 ? 0.9 : 0.55));
       }
+      idle++;
+      const settled = Math.abs(mx - rx) < 0.1 && Math.abs(my - ry) < 0.1 && Math.abs(targetScale - scale) < 0.01;
+      if (!settled || idle < 10) raf = requestAnimationFrame(loop);
     };
 
     window.addEventListener("mousemove", onMove, { passive: true });
     document.addEventListener("mouseleave", onLeave);
-    raf = requestAnimationFrame(loop);
+    startLoop();
     return () => {
       window.removeEventListener("mousemove", onMove);
       document.removeEventListener("mouseleave", onLeave);
-      cancelAnimationFrame(raf);
+      if (raf) cancelAnimationFrame(raf);
     };
   }, []);
 

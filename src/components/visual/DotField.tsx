@@ -95,19 +95,22 @@ const DotField = memo(function DotField({
       mouse.y = e.clientY - rect.top;
     };
 
-    const speedInterval = setInterval(() => {
-      const dx = mouse.prevX - mouse.x;
-      const dy = mouse.prevY - mouse.y;
-      const dist = Math.sqrt(dx * dx + dy * dy);
-      mouse.speed += (dist - mouse.speed) * 0.5;
-      if (mouse.speed < 0.001) mouse.speed = 0;
-      mouse.prevX = mouse.x;
-      mouse.prevY = mouse.y;
-    }, 20);
+    let lastSpeedTime = 0;
 
-    const tick = () => {
+    const tick = (now: number) => {
       raf = requestAnimationFrame(tick);
       if (!visible) return;
+
+      if (now - lastSpeedTime > 20) {
+        lastSpeedTime = now;
+        const dx = mouse.prevX - mouse.x;
+        const dy = mouse.prevY - mouse.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        mouse.speed += (dist - mouse.speed) * 0.5;
+        if (mouse.speed < 0.001) mouse.speed = 0;
+        mouse.prevX = mouse.x;
+        mouse.prevY = mouse.y;
+      }
       const p = propsRef.current;
       engagement += (Math.min(mouse.speed / 5, 1) - engagement) * 0.06;
       if (engagement < 0.001) engagement = 0;
@@ -163,7 +166,6 @@ const DotField = memo(function DotField({
     return () => {
       cancelAnimationFrame(raf);
       io.disconnect();
-      clearInterval(speedInterval);
       clearTimeout(resizeTimer);
       window.removeEventListener("resize", onResize);
       window.removeEventListener("mousemove", onMove);
